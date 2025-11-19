@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/hero",
+  "title": "WP EasySoft Hero",
+  "category": "layout",
+  "icon": "cover-image",
+  "description": "A hero section for WP EasySoft with plugins showcase.",
+  "keywords": [
+    "hero",
+    "banner",
+    "plugins",
+    "wordpress"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Build Better WordPress Websites With Powerful & Easy-to-Use Plugins"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "High-quality plugins for maps, videos, product galleries, and seamless integrations — trusted by WordPress professionals worldwide."
+    },
+    "primaryButtonText": {
+      "type": "string",
+      "default": "View All Plugins"
+    },
+    "primaryButtonURL": {
+      "type": "string",
+      "default": "#plugins"
+    },
+    "secondaryButtonText": {
+      "type": "string",
+      "default": "Get Easy Map PRO"
+    },
+    "secondaryButtonURL": {
+      "type": "string",
+      "default": "#"
+    },
+    "plugins": {
+      "type": "array",
+      "default": [
+        {
+          "name": "Easy Map",
+          "icon": "fas fa-map-marked-alt"
+        },
+        {
+          "name": "VideoJS Player",
+          "icon": "fas fa-video"
+        },
+        {
+          "name": "Data Sync",
+          "icon": "fas fa-sync"
+        },
+        {
+          "name": "Elementor Addons",
+          "icon": "fas fa-cube"
+        },
+        {
+          "name": "Product Gallery",
+          "icon": "fas fa-shopping-cart"
+        }
+      ]
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

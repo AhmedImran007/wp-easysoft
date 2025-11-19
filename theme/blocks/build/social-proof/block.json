@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/social-proof",
+  "title": "Social Proof Features",
+  "category": "layout",
+  "icon": "awards",
+  "description": "A social proof section showcasing key features and compatibility.",
+  "keywords": [
+    "social proof",
+    "features",
+    "compatibility",
+    "trust"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "features": {
+      "type": "array",
+      "default": [
+        {
+          "icon": "fas fa-feather-alt",
+          "text": "Lightweight Code"
+        },
+        {
+          "icon": "fas fa-sync-alt",
+          "text": "Regular Updates"
+        },
+        {
+          "icon": "fas fa-shopping-basket",
+          "text": "WooCommerce Ready"
+        },
+        {
+          "icon": "fab fa-wordpress",
+          "text": "Gutenberg Compatible"
+        },
+        {
+          "icon": "fab fa-elementor",
+          "text": "Elementor Compatible"
+        },
+        {
+          "icon": "fas fa-headset",
+          "text": "Fast Support"
+        }
+      ]
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}
