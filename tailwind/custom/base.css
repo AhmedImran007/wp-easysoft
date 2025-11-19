@@ -1,0 +1,89 @@
+/**
+ * Custom styles to immediately follow Tailwind’s `base` layer
+ */
+
+/**
+ * This uses the background and foreground colors declared in the `theme.json`
+ * file and is applied both to the front end and in the block editor.
+ */
+body {
+	@apply bg-background text-foreground font-sans;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+body {
+	font-family: "Inter", sans-serif;
+}
+.gradient-bg {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+}
+.gradient-text {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+.accent-gradient {
+	background: linear-gradient(135deg, #1f3266 0%, #4ecdc4 100%);
+}
+.card-hover {
+	transition: all 0.3s ease;
+}
+.card-hover:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 20px rgba(31, 50, 102, 0.1);
+}
+.plugin-card {
+	transition: all 0.3s ease;
+}
+.plugin-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 15px 30px rgba(31, 50, 102, 0.15);
+}
+.btn-primary {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+	transition: all 0.3s ease;
+}
+.btn-primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 20px rgba(31, 50, 102, 0.4);
+}
+.btn-secondary {
+	transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+	transform: translateY(-2px);
+}
+.feature-icon {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+.text-primary {
+	color: #1f3266;
+}
+.bg-primary {
+	background-color: #1f3266;
+}
+.bg-primary-light {
+	background-color: rgba(31, 50, 102, 0.1);
+}
+.border-primary {
+	border-color: #1f3266;
+}
+.text-primary-light {
+	color: #4a6fa5;
+}
+.accent-color {
+	color: #ff6b6b;
+}
+.accent-bg {
+	background-color: #ff6b6b;
+}
+.accent-light-bg {
+	background-color: rgba(255, 107, 107, 0.1);
+}
+.accent-border {
+	border-color: #ff6b6b;
+}
