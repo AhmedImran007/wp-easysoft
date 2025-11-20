@@ -1,0 +1,65 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wp-easysoft/featured-plugin",
+	"title": "Featured Plugin",
+	"category": "layout",
+	"icon": "location",
+	"description": "A featured plugin showcase section with features and call-to-action.",
+	"keywords": ["plugin", "featured", "showcase", "map", "store locator"],
+	"textdomain": "wp-easysoft",
+
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "🚀 Introducing Easy Map — The Ultimate WordPress Store Locator Plugin"
+		},
+		"description": {
+			"type": "string",
+			"default": "Create beautiful, customizable maps using Google Maps, OpenStreetMap, or Leaflet — with powerful features like clustering, filters, search, and unlimited locations."
+		},
+		"features": {
+			"type": "array",
+			"default": [
+				"Google Maps + OSM + Leaflet",
+				"Store Locator",
+				"Clustering",
+				"Unlimited Markers",
+				"Custom Map Styles",
+				"WooCommerce Support"
+			]
+		},
+		"primaryButtonText": {
+			"type": "string",
+			"default": "Get Easy Map PRO"
+		},
+		"primaryButtonURL": {
+			"type": "string",
+			"default": "#"
+		},
+		"secondaryButtonText": {
+			"type": "string",
+			"default": "Free Version on WP.org"
+		},
+		"secondaryButtonURL": {
+			"type": "string",
+			"default": "#"
+		},
+		"imageURL": {
+			"type": "string",
+			"default": "https://picsum.photos/seed/easymapinterface/600/400.jpg"
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": "Easy Map Interface"
+		}
+	},
+
+	"supports": {
+		"align": ["wide", "full"],
+		"html": false
+	},
+
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/cta-section",
+  "title": "CTA Section",
+  "category": "layout",
+  "icon": "megaphone",
+  "description": "A call-to-action section with features list and prominent button.",
+  "keywords": [
+    "cta",
+    "call to action",
+    "upgrade",
+    "features",
+    "pro"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Upgrade to Easy Map PRO and Unlock Powerful Features"
+    },
+    "buttonText": {
+      "type": "string",
+      "default": "Buy Easy Map PRO"
+    },
+    "buttonURL": {
+      "type": "string",
+      "default": "#"
+    },
+    "features": {
+      "type": "array",
+      "default": [
+        "Custom Map Themes",
+        "Marker Clustering",
+        "Location Filters",
+        "Unlimited Stores",
+        "Priority Support",
+        "Automatic Updates"
+      ]
+    },
+    "backgroundStyle": {
+      "type": "string",
+      "default": "gradient"
+    },
+    "textColor": {
+      "type": "string",
+      "default": "text-white"
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/plugins-grid",
+  "title": "Plugins Grid",
+  "category": "layout",
+  "icon": "admin-plugins",
+  "description": "Display a grid of WordPress plugins from the custom post type.",
+  "keywords": [
+    "plugins",
+    "grid",
+    "showcase",
+    "wordpress"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Our WordPress Plugins"
+    },
+    "description": {
+      "type": "string",
+      "default": "Enhance your site with lightweight, high-performance tools."
+    },
+    "numberOfPosts": {
+      "type": "number",
+      "default": 6
+    },
+    "orderBy": {
+      "type": "string",
+      "default": "date"
+    },
+    "order": {
+      "type": "string",
+      "default": "desc"
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

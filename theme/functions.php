@@ -353,3 +353,239 @@ add_action('init', function () {
 	error_log("=== BLOCK DEBUG END ===");
 
 });
+
+class WPES_Dropdown_Walker extends Walker_Nav_Menu
+{
+
+	// Start submenu
+	function start_lvl(&$output, $depth = 0, $args = null)
+	{
+		$indent  = str_repeat("\t", $depth);
+		$output .= "\n$indent<ul x-show=\"open\"
+            x-transition:enter=\"transition ease-out duration-200\"
+            x-transition:enter-start=\"opacity-0 translate-y-2\"
+            x-transition:enter-end=\"opacity-100 translate-y-0\"
+            x-transition:leave=\"transition ease-in duration-150\"
+            x-transition:leave-start=\"opacity-100 translate-y-0\"
+            x-transition:leave-end=\"opacity-0 translate-y-2\"
+            class=\"absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 border border-gray-200 z-50\"
+            @mouseenter=\"open = true\"
+            @mouseleave=\"open = false\">\n";
+	}
+
+	// Start menu item
+	function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+	{
+		$has_children = in_array("menu-item-has-children", $item->classes);
+		$indent       = ($depth) ? str_repeat("\t", $depth) : '';
+
+		// <li> with Alpine.js data
+		$output .= $indent . '<li class="relative" x-data="{ open: false }" ' .
+			($has_children ? '@mouseenter="open = true" @mouseleave="open = false"' : '') . '>';
+
+		$atts = !empty($item->url) ? ' href="' . esc_url($item->url) . '"' : '';
+
+		$output .= '<a ' . $atts . ' class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-primary transition flex items-center justify-between w-full">';
+		$output .= esc_html($item->title);
+
+		// Add dropdown arrow if has children
+		if ($has_children) {
+			$output .= '<i class="fas fa-chevron-down ml-2 text-xs transition-transform" :class="{ \'rotate-180\': open }"></i>';
+		}
+
+		$output .= '</a>';
+	}
+
+	// End menu item
+	function end_el(&$output, $item, $depth = 0, $args = null)
+	{
+		$output .= "</li>\n";
+	}
+}
+
+// Register Custom Post Type: WP Plugin
+function wp_easysoft_register_wp_plugin_post_type()
+{
+	$labels = array(
+		'name'                  => _x('WP Plugins', 'Post Type General Name', 'wp-easysoft'),
+		'singular_name'         => _x('WP Plugin', 'Post Type Singular Name', 'wp-easysoft'),
+		'menu_name'             => __('WP Plugins', 'wp-easysoft'),
+		'name_admin_bar'        => __('WP Plugin', 'wp-easysoft'),
+		'archives'              => __('WP Plugin Archives', 'wp-easysoft'),
+		'attributes'            => __('WP Plugin Attributes', 'wp-easysoft'),
+		'parent_item_colon'     => __('Parent WP Plugin:', 'wp-easysoft'),
+		'all_items'             => __('All WP Plugins', 'wp-easysoft'),
+		'add_new_item'          => __('Add New WP Plugin', 'wp-easysoft'),
+		'add_new'               => __('Add New', 'wp-easysoft'),
+		'new_item'              => __('New WP Plugin', 'wp-easysoft'),
+		'edit_item'             => __('Edit WP Plugin', 'wp-easysoft'),
+		'update_item'           => __('Update WP Plugin', 'wp-easysoft'),
+		'view_item'             => __('View WP Plugin', 'wp-easysoft'),
+		'view_items'            => __('View WP Plugins', 'wp-easysoft'),
+		'search_items'          => __('Search WP Plugin', 'wp-easysoft'),
+		'not_found'             => __('Not found', 'wp-easysoft'),
+		'not_found_in_trash'    => __('Not found in Trash', 'wp-easysoft'),
+		'featured_image'        => __('WP Plugin Icon', 'wp-easysoft'),
+		'set_featured_image'    => __('Set plugin icon', 'wp-easysoft'),
+		'remove_featured_image' => __('Remove plugin icon', 'wp-easysoft'),
+		'use_featured_image'    => __('Use as plugin icon', 'wp-easysoft'),
+		'insert_into_item'      => __('Insert into plugin', 'wp-easysoft'),
+		'uploaded_to_this_item' => __('Uploaded to this plugin', 'wp-easysoft'),
+		'items_list'            => __('WP Plugins list', 'wp-easysoft'),
+		'items_list_navigation' => __('WP Plugins list navigation', 'wp-easysoft'),
+		'filter_items_list'     => __('Filter plugins list', 'wp-easysoft'),
+	);
+
+	$args = array(
+		'label'               => __('WP Plugin', 'wp-easysoft'),
+		'description'         => __('WordPress Plugin Showcase', 'wp-easysoft'),
+		'labels'              => $labels,
+		'supports'            => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
+		'taxonomies'          => array('wp_plugin_category'),
+		'hierarchical'        => false,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'menu_position'       => 5,
+		'menu_icon'           => 'dashicons-admin-plugins',
+		'show_in_admin_bar'   => true,
+		'show_in_nav_menus'   => true,
+		'can_export'          => true,
+		'has_archive'         => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'capability_type'     => 'post',
+		'show_in_rest'        => true,
+	);
+
+	register_post_type('wp_plugin', $args);
+}
+add_action('init', 'wp_easysoft_register_wp_plugin_post_type', 0);
+
+// Register Custom Taxonomy for WP Plugin Categories
+function wp_easysoft_register_wp_plugin_taxonomy()
+{
+	$labels = array(
+		'name'                       => _x('WP Plugin Categories', 'Taxonomy General Name', 'wp-easysoft'),
+		'singular_name'              => _x('WP Plugin Category', 'Taxonomy Singular Name', 'wp-easysoft'),
+		'menu_name'                  => __('Categories', 'wp-easysoft'),
+		'all_items'                  => __('All Categories', 'wp-easysoft'),
+		'parent_item'                => __('Parent Category', 'wp-easysoft'),
+		'parent_item_colon'          => __('Parent Category:', 'wp-easysoft'),
+		'new_item_name'              => __('New Category Name', 'wp-easysoft'),
+		'add_new_item'               => __('Add New Category', 'wp-easysoft'),
+		'edit_item'                  => __('Edit Category', 'wp-easysoft'),
+		'update_item'                => __('Update Category', 'wp-easysoft'),
+		'view_item'                  => __('View Category', 'wp-easysoft'),
+		'separate_items_with_commas' => __('Separate categories with commas', 'wp-easysoft'),
+		'add_or_remove_items'        => __('Add or remove categories', 'wp-easysoft'),
+		'choose_from_most_used'      => __('Choose from the most used', 'wp-easysoft'),
+		'popular_items'              => __('Popular Categories', 'wp-easysoft'),
+		'search_items'               => __('Search Categories', 'wp-easysoft'),
+		'not_found'                  => __('Not Found', 'wp-easysoft'),
+		'no_terms'                   => __('No categories', 'wp-easysoft'),
+		'items_list'                 => __('Categories list', 'wp-easysoft'),
+		'items_list_navigation'      => __('Categories list navigation', 'wp-easysoft'),
+	);
+
+	$args = array(
+		'labels'            => $labels,
+		'hierarchical'      => true,
+		'public'            => true,
+		'show_ui'           => true,
+		'show_admin_column' => true,
+		'show_in_nav_menus' => true,
+		'show_tagcloud'     => true,
+		'show_in_rest'      => true,
+	);
+
+	register_taxonomy('wp_plugin_category', array('wp_plugin'), $args);
+}
+add_action('init', 'wp_easysoft_register_wp_plugin_taxonomy', 0);
+
+// Add meta fields for wp_plugins
+function wp_easysoft_add_wp_plugin_meta_boxes()
+{
+	add_meta_box(
+		'wp_plugin_details',
+		__('WP Plugin Details', 'wp-easysoft'),
+		'wp_easysoft_wp_plugin_meta_box_callback',
+		'wp_plugin',
+		'normal',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'wp_easysoft_add_wp_plugin_meta_boxes');
+
+function wp_easysoft_wp_plugin_meta_box_callback($post)
+{
+	wp_nonce_field('wp_easysoft_save_wp_plugin_meta', 'wp_easysoft_wp_plugin_meta_nonce');
+
+	$has_pro          = get_post_meta($post->ID, 'has_pro', true);
+	$active_installs  = get_post_meta($post->ID, 'active_installs', true);
+	$free_version_url = get_post_meta($post->ID, 'free_version_url', true);
+	$pro_version_url  = get_post_meta($post->ID, 'pro_version_url', true);
+	?>
+	<div style="display: grid; gap: 12px;">
+		<p>
+			<label for="has_pro" style="display: block; margin-bottom: 4px;">
+				<input type="checkbox" id="has_pro" name="has_pro" value="1" <?php checked($has_pro, '1'); ?> />
+				<?php _e('Has PRO version available', 'wp-easysoft'); ?>
+			</label>
+		</p>
+
+		<p>
+			<label for="active_installs" style="display: block; margin-bottom: 4px;">
+				<?php _e('Active Installs', 'wp-easysoft'); ?>
+			</label>
+			<input type="text" id="active_installs" name="active_installs" value="<?php echo esc_attr($active_installs); ?>"
+				class="widefat" placeholder="e.g., 90+ Active Installs" />
+		</p>
+
+		<p>
+			<label for="free_version_url" style="display: block; margin-bottom: 4px;">
+				<?php _e('Free Version URL', 'wp-easysoft'); ?>
+			</label>
+			<input type="url" id="free_version_url" name="free_version_url" value="<?php echo esc_attr($free_version_url); ?>"
+				class="widefat" placeholder="https://wordpress.org/plugins/..." />
+		</p>
+
+		<p>
+			<label for="pro_version_url" style="display: block; margin-bottom: 4px;">
+				<?php _e('PRO Version URL', 'wp-easysoft'); ?>
+			</label>
+			<input type="url" id="pro_version_url" name="pro_version_url" value="<?php echo esc_attr($pro_version_url); ?>"
+				class="widefat" placeholder="https://your-site.com/pro-version" />
+		</p>
+	</div>
+	<?php
+}
+
+function wp_easysoft_save_wp_plugin_meta($post_id)
+{
+	if (
+		!isset($_POST['wp_easysoft_wp_plugin_meta_nonce']) ||
+		!wp_verify_nonce($_POST['wp_easysoft_wp_plugin_meta_nonce'], 'wp_easysoft_save_wp_plugin_meta')
+	) {
+		return;
+	}
+
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+		return;
+	}
+
+	if (!current_user_can('edit_post', $post_id)) {
+		return;
+	}
+
+	$fields = ['has_pro', 'active_installs', 'free_version_url', 'pro_version_url'];
+
+	foreach ($fields as $field) {
+		if (isset($_POST[$field])) {
+			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
+		} else {
+			delete_post_meta($post_id, $field);
+		}
+	}
+}
+add_action('save_post_wp_plugin', 'wp_easysoft_save_wp_plugin_meta');

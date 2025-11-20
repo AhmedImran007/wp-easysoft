@@ -1,0 +1,67 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wp-easysoft/testimonials",
+	"title": "Testimonials",
+	"category": "layout",
+	"icon": "testimonial",
+	"description": "Display customer testimonials and reviews in a beautiful layout.",
+	"keywords": ["testimonials", "reviews", "quotes", "customers"],
+	"textdomain": "wp-easysoft",
+
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "What Our Customers Say"
+		},
+		"description": {
+			"type": "string",
+			"default": "Join thousands of satisfied WordPress users who trust our plugins"
+		},
+		"testimonials": {
+			"type": "array",
+			"default": [
+				{
+					"name": "Sarah Johnson",
+					"role": "Web Developer",
+					"company": "Creative Agency",
+					"content": "Easy Map plugin saved me hours of work! The interface is intuitive and the documentation is excellent. My clients love the store locator feature.",
+					"rating": 5,
+					"avatar": ""
+				},
+				{
+					"name": "Mike Chen",
+					"role": "E-commerce Manager",
+					"company": "Online Store",
+					"content": "The Product Video Gallery transformed our WooCommerce store. Sales increased by 30% after adding video demonstrations to our products.",
+					"rating": 5,
+					"avatar": ""
+				},
+				{
+					"name": "Emily Rodriguez",
+					"role": "Blog Owner",
+					"company": "Travel Blog",
+					"content": "Lightweight, fast, and exactly what I needed. The support team is incredibly responsive and helpful. Highly recommended!",
+					"rating": 5,
+					"avatar": ""
+				}
+			]
+		},
+		"layout": {
+			"type": "string",
+			"default": "grid"
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "bg-white"
+		}
+	},
+
+	"supports": {
+		"align": ["wide", "full"],
+		"html": false
+	},
+
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
