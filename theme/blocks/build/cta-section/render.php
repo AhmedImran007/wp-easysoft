@@ -30,7 +30,7 @@ $buttonClasses = [
 
 <!-- CTA Section -->
 <section
-  class="max-w-full py-16 <?php echo esc_attr($backgroundClasses[$backgroundStyle]); ?> <?php echo esc_attr($textColor); ?>"
+  class="max-w-full py-16 not-prose <?php echo esc_attr($backgroundClasses[$backgroundStyle]); ?> <?php echo esc_attr($textColor); ?>"
   aria-labelledby="cta-title">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto text-center">

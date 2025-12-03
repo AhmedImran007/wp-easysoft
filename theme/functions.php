@@ -38,7 +38,7 @@ if (!defined('WP_EASYSOFT_TYPOGRAPHY_CLASSES')) {
 	 */
 	define(
 		'WP_EASYSOFT_TYPOGRAPHY_CLASSES',
-		'prose prose-neutral max-w-none prose-a:text-primary'
+		'prose prose-neutral max-w-none prose-a:text-primary content-wide'
 	);
 }
 
@@ -122,25 +122,68 @@ endif;
 add_action('after_setup_theme', 'wp_easysoft_setup');
 
 /**
- * Register widget area.
+ * Register widget areas.
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
 function wp_easysoft_widgets_init()
 {
+
+	// Footer Widget
 	register_sidebar(
 		array(
 			'name'          => __('Footer', 'wp-easysoft'),
-			'id'            => 'sidebar-1',
+			'id'            => 'footer-widget',
 			'description'   => __('Add widgets here to appear in your footer.', 'wp-easysoft'),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'before_widget' => '<section id="%1$s" class="widget %2$s mb-6">',
 			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
+			'before_title'  => '<h2 class="widget-title text-lg font-bold mb-3">',
 			'after_title'   => '</h2>',
 		)
 	);
+
+	// Main Sidebar
+	register_sidebar(
+		array(
+			'name'          => __('Main Sidebar', 'tw'),
+			'id'            => 'main-sidebar',
+			'description'   => __('Widgets in this area will be shown in the sidebar.', 'tw'),
+			'before_widget' => '<div id="%1$s" class="widget %2$s mb-6 p-4 bg-white shadow rounded">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title text-xl font-bold mb-3">',
+			'after_title'   => '</h3>',
+		)
+	);
+
+	// Header Widget Area (NEW)
+	register_sidebar(
+		array(
+			'name'          => __('Header Widget', 'wp-easysoft'),
+			'id'            => 'header-widget',
+			'description'   => __('Appears in the header section.', 'wp-easysoft'),
+			'before_widget' => '<div id="%1$s" class="widget %2$s header-widget mx-4">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title text-base font-semibold mb-2">',
+			'after_title'   => '</h3>',
+		)
+	);
+
+	// Blog Sidebar (NEW)
+	register_sidebar(
+		array(
+			'name'          => __('Blog Sidebar', 'wp-easysoft'),
+			'id'            => 'blog-sidebar',
+			'description'   => __('Sidebar widgets for blog pages.', 'wp-easysoft'),
+			'before_widget' => '<div id="%1$s" class="widget %2$s mb-6 p-4 bg-gray-100 border rounded">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title text-lg font-semibold mb-2">',
+			'after_title'   => '</h3>',
+		)
+	);
 }
+
 add_action('widgets_init', 'wp_easysoft_widgets_init');
+
 
 /**
  * Enqueue scripts and styles.
@@ -235,87 +278,36 @@ require get_template_directory() . '/inc/template-functions.php';
 
 
 /**
- * Register theme Gutenberg blocks with full debugging.
+ * Register theme Gutenberg blocks (clean version).
  */
 add_action('init', function () {
 
 	$build_dir = get_template_directory() . '/blocks/build/';
 	$manifest  = $build_dir . 'blocks-manifest.php';
 
-	//
-	// Debug: Log base paths
-	//
-	error_log("=== BLOCK DEBUG START ===");
-	error_log("Build directory: " . $build_dir);
-	error_log("Manifest file: " . $manifest);
-
-	//
-	// Step 1: Does the build directory exist?
-	//
+	// Stop if build directory missing
 	if (!file_exists($build_dir)) {
-		error_log("ERROR: build directory does NOT exist.");
-		error_log("=== BLOCK DEBUG END ===");
 		return;
-	} else {
-		error_log("OK: build directory exists.");
 	}
 
-	//
-	// Step 2: Does manifest file exist?
-	//
-	if (file_exists($manifest)) {
-		error_log("OK: manifest.php exists.");
-	} else {
-		error_log("WARNING: manifest.php does NOT exist.");
-	}
-
-	//
-	// Step 3: List all block.json files in build/
-	//
-	$block_json_files = glob($build_dir . '*/block.json');
-	error_log("Block.json files detected: " . print_r($block_json_files, true));
-
-	//
-	// Step 4: WordPress 6.5 bulk loader
-	//
+	// --- WordPress 6.5 bulk loader ---
 	if (function_exists('wp_register_block_types_from_metadata_collection')) {
-
-		error_log("Using: wp_register_block_types_from_metadata_collection()");
-
 		if (file_exists($manifest)) {
 			wp_register_block_types_from_metadata_collection($build_dir, $manifest);
-			error_log("SUCCESS: Blocks registered via metadata collection loader.");
-			error_log("=== BLOCK DEBUG END ===");
 			return;
-		} else {
-			error_log("ERROR: Manifest missing — cannot use collection loader.");
 		}
 	}
 
-	//
-	// Step 5: WordPress fallback metadata collection loader
-	//
+	// --- Fallback loader ---
 	if (function_exists('wp_register_block_metadata_collection')) {
-
-		error_log("Using: wp_register_block_metadata_collection()");
-
 		if (file_exists($manifest)) {
 			wp_register_block_metadata_collection($build_dir, $manifest);
-			error_log("SUCCESS: Blocks registered via metadata fallback loader.");
-			error_log("=== BLOCK DEBUG END ===");
 			return;
-		} else {
-			error_log("ERROR: Manifest missing — cannot use metadata loader.");
 		}
 	}
 
-	//
-	// Step 6: Manual registration using manifest
-	//
+	// --- Manual registration using manifest ---
 	if (file_exists($manifest)) {
-
-		error_log("FALLBACK: Manual block loading using manifest.");
-
 		$manifest_data = require $manifest;
 
 		foreach (array_keys($manifest_data) as $slug) {
@@ -323,34 +315,19 @@ add_action('init', function () {
 
 			if (file_exists($block_path . '/block.json')) {
 				register_block_type($block_path);
-				error_log("REGISTERED: " . $block_path);
-			} else {
-				error_log("SKIPPED (missing block.json): " . $block_path);
 			}
 		}
-
-		error_log("=== BLOCK DEBUG END ===");
 		return;
 	}
 
-	//
-	// Step 7: Final fallback — scan all folders
-	//
-	error_log("FALLBACK: Scanning directories manually...");
-
+	// --- Final fallback: scan directories ---
 	$folders = glob($build_dir . '*', GLOB_ONLYDIR);
 
 	foreach ($folders as $folder) {
-
 		if (file_exists($folder . '/block.json')) {
 			register_block_type($folder);
-			error_log("REGISTERED (no manifest): " . $folder);
-		} else {
-			error_log("SKIPPED (no block.json): " . $folder);
 		}
 	}
-
-	error_log("=== BLOCK DEBUG END ===");
 
 });
 
@@ -368,7 +345,7 @@ class WPES_Dropdown_Walker extends Walker_Nav_Menu
             x-transition:leave=\"transition ease-in duration-150\"
             x-transition:leave-start=\"opacity-100 translate-y-0\"
             x-transition:leave-end=\"opacity-0 translate-y-2\"
-            class=\"absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 border border-gray-200 z-50\"
+            class=\"absolute left-0 mt-2 w-48 bg-white shadow-lg py-2 border border-gray-200 z-50\"
             @mouseenter=\"open = true\"
             @mouseleave=\"open = false\">\n";
 	}
@@ -589,3 +566,327 @@ function wp_easysoft_save_wp_plugin_meta($post_id)
 	}
 }
 add_action('save_post_wp_plugin', 'wp_easysoft_save_wp_plugin_meta');
+
+/**
+ * Add Featured Post Meta Box
+ */
+function tw_add_featured_meta_box()
+{
+	add_meta_box(
+		'tw_featured_post',
+		__('Featured Post', '_tw'),
+		'tw_featured_post_callback',
+		'post',
+		'side',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'tw_add_featured_meta_box');
+
+/**
+ * Meta Box HTML
+ */
+function tw_featured_post_callback($post)
+{
+	wp_nonce_field('tw_save_featured_post', 'tw_featured_post_nonce');
+	$value = get_post_meta($post->ID, '_tw_featured_post', true);
+	?>
+	<p>
+		<label>
+			<input type="checkbox" name="tw_featured_post" value="1" <?php checked($value, '1'); ?> />
+			<?php _e('Mark this post as Featured', '_tw'); ?>
+		</label>
+	</p>
+	<?php
+}
+
+/**
+ * Save Featured Status
+ */
+function tw_save_featured_post($post_id)
+{
+
+	// Nonce check
+	if (
+		!isset($_POST['tw_featured_post_nonce']) ||
+		!wp_verify_nonce($_POST['tw_featured_post_nonce'], 'tw_save_featured_post')
+	) {
+		return;
+	}
+
+	// Autosave check
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+		return;
+
+	// Permission check
+	if (!current_user_can('edit_post', $post_id))
+		return;
+
+	// Save / Delete
+	if (isset($_POST['tw_featured_post'])) {
+		update_post_meta($post_id, '_tw_featured_post', '1');
+	} else {
+		delete_post_meta($post_id, '_tw_featured_post');
+	}
+}
+add_action('save_post', 'tw_save_featured_post');
+
+/**
+ * Display reading time with icon
+ */
+function wp_display_reading_time($post_id = null)
+{
+	if (!$post_id) {
+		$post_id = get_the_ID();
+	}
+
+	$post_content = get_post_field('post_content', $post_id);
+	$reading_time = wp_estimate_reading_time($post_content);
+
+	return '<span>' . $reading_time . ' min read</span>';
+}
+
+/**
+ * Calculate reading time from content
+ */
+function wp_estimate_reading_time($content)
+{
+	$word_count   = str_word_count(strip_tags($content));
+	$reading_time = ceil($word_count / 200); // Assuming 200 words per minute
+	return $reading_time ?: 1;
+}
+
+// Optional: Add reading time to post meta in archive views
+function wp_add_reading_time_to_archive($post_id = null)
+{
+	if (!$post_id) {
+		global $post;
+		$post_id = $post->ID;
+	}
+
+	$post_content = get_post_field('post_content', $post_id);
+	$reading_time = wp_estimate_reading_time($post_content);
+
+	echo '<span class="reading-time">';
+	echo '<i class="fas fa-clock mr-1"></i>';
+	echo $reading_time . ' ' . __('min read', 'wp-easysoft');
+	echo '</span>';
+}
+
+
+/**
+ * Get user role display name with proper error handling
+ */
+function wp_get_user_role_display_name($user_id = null)
+{
+	if (!$user_id) {
+		$user_id = get_the_author_meta('ID');
+	}
+
+	// Check if user exists
+	$user = get_userdata($user_id);
+	if (!$user) {
+		return __('Author', 'wp-easysoft');
+	}
+
+	// Check if user has roles
+	if (empty($user->roles)) {
+		return __('Author', 'wp-easysoft');
+	}
+
+	// Get WordPress roles object
+	$wp_roles = wp_roles();
+
+	// Get the first role and convert to display name
+	$first_role = reset($user->roles);
+
+	// Check if role exists in role names
+	if (isset($wp_roles->role_names[$first_role])) {
+		return $wp_roles->role_names[$first_role];
+	}
+
+	// Fallback to role slug with capitalization
+	if ($first_role) {
+		return ucfirst(str_replace('_', ' ', $first_role));
+	}
+
+	return __('Author', 'wp-easysoft');
+}
+
+/**
+ * Display author info with role (safe version)
+ */
+function wp_display_author_info($size = 40, $show_role = true)
+{
+	$user_id = get_the_author_meta('ID');
+
+	// Check if user exists before trying to get avatar
+	$user = get_userdata($user_id);
+	if (!$user) {
+		return '';
+	}
+
+	$avatar       = get_avatar($user_id, $size, '', '', array('class' => 'w-' . $size . ' h-' . $size . ' rounded-full'));
+	$display_name = $user->display_name ?: $user->user_login;
+
+	$output  = '<div class="flex items-center gap-2">';
+	$output .= $avatar;
+	$output .= '<div class="text-left">';
+	$output .= '<div class="font-medium text-gray-800">' . esc_html($display_name) . '</div>';
+
+	if ($show_role) {
+		$role_display  = wp_get_user_role_display_name($user_id);
+		$output       .= '<div class="text-sm text-gray-600">' . esc_html($role_display) . '</div>';
+	}
+
+	$output .= '</div>';
+	$output .= '</div>';
+
+	return $output;
+}
+
+/**
+ * Add social media fields to user profile
+ */
+
+function wp_easysoft_add_user_social_fields($methods)
+{
+	// Remove existing methods if needed
+	unset($methods['aim']);
+	unset($methods['yim']);
+	unset($methods['jabber']);
+
+	// Add our social fields
+	$methods['twitter']   = __('Twitter URL', 'wp-easysoft');
+	$methods['linkedin']  = __('LinkedIn URL', 'wp-easysoft');
+	$methods['github']    = __('GitHub URL', 'wp-easysoft');
+	$methods['facebook']  = __('Facebook URL', 'wp-easysoft');
+	$methods['instagram'] = __('Instagram URL', 'wp-easysoft');
+
+	return $methods;
+}
+
+// Add custom fields to user profile (alternative method)
+add_action('show_user_profile', 'wp_easysoft_show_extra_profile_fields');
+add_action('edit_user_profile', 'wp_easysoft_show_extra_profile_fields');
+
+function wp_easysoft_show_extra_profile_fields($user)
+{
+	?>
+	<h3><?php _e('Social Media Profiles', 'wp-easysoft'); ?></h3>
+	<table class="form-table">
+		<tr>
+			<th><label for="twitter"><?php _e('Twitter URL', 'wp-easysoft'); ?></label></th>
+			<td>
+				<input type="url" name="twitter" id="twitter"
+					value="<?php echo esc_url(get_the_author_meta('twitter', $user->ID)); ?>" class="regular-text" />
+				<p class="description"><?php _e('Enter your full Twitter profile URL', 'wp-easysoft'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="linkedin"><?php _e('LinkedIn URL', 'wp-easysoft'); ?></label></th>
+			<td>
+				<input type="url" name="linkedin" id="linkedin"
+					value="<?php echo esc_url(get_the_author_meta('linkedin', $user->ID)); ?>" class="regular-text" />
+				<p class="description"><?php _e('Enter your full LinkedIn profile URL', 'wp-easysoft'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="github"><?php _e('GitHub URL', 'wp-easysoft'); ?></label></th>
+			<td>
+				<input type="url" name="github" id="github"
+					value="<?php echo esc_url(get_the_author_meta('github', $user->ID)); ?>" class="regular-text" />
+				<p class="description"><?php _e('Enter your full GitHub profile URL', 'wp-easysoft'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="facebook"><?php _e('Facebook URL', 'wp-easysoft'); ?></label></th>
+			<td>
+				<input type="url" name="facebook" id="facebook"
+					value="<?php echo esc_url(get_the_author_meta('facebook', $user->ID)); ?>" class="regular-text" />
+				<p class="description"><?php _e('Enter your full Facebook profile URL', 'wp-easysoft'); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="instagram"><?php _e('Instagram URL', 'wp-easysoft'); ?></label></th>
+			<td>
+				<input type="url" name="instagram" id="instagram"
+					value="<?php echo esc_url(get_the_author_meta('instagram', $user->ID)); ?>" class="regular-text" />
+				<p class="description"><?php _e('Enter your full Instagram profile URL', 'wp-easysoft'); ?></p>
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+
+// Save the custom fields
+add_action('personal_options_update', 'wp_easysoft_save_extra_profile_fields');
+add_action('edit_user_profile_update', 'wp_easysoft_save_extra_profile_fields');
+
+function wp_easysoft_save_extra_profile_fields($user_id)
+{
+	if (!current_user_can('edit_user', $user_id)) {
+		return false;
+	}
+
+	// Sanitize and save social URLs
+	$social_fields = array('twitter', 'linkedin', 'github', 'facebook', 'instagram');
+
+	foreach ($social_fields as $field) {
+		if (isset($_POST[$field])) {
+			$url = esc_url_raw($_POST[$field]);
+			update_user_meta($user_id, $field, $url);
+		}
+	}
+}
+
+// Add validation for social URLs
+add_action('user_profile_update_errors', 'wp_easysoft_validate_social_urls', 10, 3);
+
+function wp_easysoft_validate_social_urls($errors, $update, $user)
+{
+	$social_fields = array('twitter', 'linkedin', 'github', 'facebook', 'instagram');
+
+	foreach ($social_fields as $field) {
+		if (isset($_POST[$field]) && !empty($_POST[$field])) {
+			$url = $_POST[$field];
+
+			// Check if it's a valid URL
+			if (!filter_var($url, FILTER_VALIDATE_URL)) {
+				$errors->add($field . '_error', sprintf(__('Please enter a valid URL for %s', 'wp-easysoft'), $field));
+			}
+
+			// Check for specific domain patterns (optional)
+			switch ($field) {
+				case 'twitter':
+					if (strpos($url, 'twitter.com') === false && strpos($url, 'x.com') === false) {
+						$errors->add('twitter_error', __('Twitter URL should contain twitter.com or x.com', 'wp-easysoft'));
+					}
+					break;
+				case 'linkedin':
+					if (strpos($url, 'linkedin.com') === false) {
+						$errors->add('linkedin_error', __('LinkedIn URL should contain linkedin.com', 'wp-easysoft'));
+					}
+					break;
+				case 'github':
+					if (strpos($url, 'github.com') === false) {
+						$errors->add('github_error', __('GitHub URL should contain github.com', 'wp-easysoft'));
+					}
+					break;
+				case 'facebook':
+					if (strpos($url, 'facebook.com') === false) {
+						$errors->add('facebook_error', __('Facebook URL should contain facebook.com', 'wp-easysoft'));
+					}
+					break;
+				case 'instagram':
+					if (strpos($url, 'instagram.com') === false) {
+						$errors->add('instagram_error', __('Instagram URL should contain instagram.com', 'wp-easysoft'));
+					}
+					break;
+			}
+		}
+	}
+
+	return $errors;
+}
+

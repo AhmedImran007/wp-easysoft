@@ -18,7 +18,7 @@ $plugins_query = new WP_Query($plugin_args);
 ?>
 
 <!-- All Plugins Overview -->
-<section id="plugins" class="py-16 bg-white max-w-full" aria-labelledby="plugins-grid-title">
+<section id="plugins" class="py-16 bg-white max-w-full not-prose" aria-labelledby="plugins-grid-title">
   <div class="container mx-auto px-4">
     <!-- Header -->
     <h2 id="plugins-grid-title" class="text-3xl md:text-4xl font-bold text-center mb-4">

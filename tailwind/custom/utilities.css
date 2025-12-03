@@ -6,3 +6,91 @@
  *
  * https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
  */
+.content-wide > * {
+	max-width: 100% !important;
+}
+
+.gradient-bg {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+}
+
+.gradient-text {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.btn-primary {
+	background: linear-gradient(135deg, #1f3266 0%, #4a6fa5 100%);
+	transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 20px rgba(31, 50, 102, 0.4);
+}
+
+.text-primary {
+	color: #1f3266;
+}
+
+.bg-primary {
+	background-color: #1f3266;
+}
+
+.bg-primary-light {
+	background-color: rgba(31, 50, 102, 0.1);
+}
+
+.border-primary {
+	border-color: #1f3266;
+}
+
+.text-primary-light {
+	color: #4a6fa5;
+}
+
+.accent-color {
+	color: #ff6b6b;
+}
+
+.accent-bg {
+	background-color: #ff6b6b;
+}
+
+.accent-light-bg {
+	background-color: rgba(255, 107, 107, 0.1);
+}
+
+.social-share {
+	transition: all 0.3s ease;
+}
+
+.social-share:hover {
+	transform: translateY(-3px);
+}
+
+.related-card {
+	transition: all 0.3s ease;
+}
+
+.related-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 20px rgba(31, 50, 102, 0.15);
+}
+
+.comment-card {
+	transition: all 0.3s ease;
+}
+
+.comment-card:hover {
+	background-color: rgba(31, 50, 102, 0.02);
+}
+
+.line-clamp-2 {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}

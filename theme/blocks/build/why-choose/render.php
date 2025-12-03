@@ -25,7 +25,7 @@ $features = $attributes['features'] ?? [
 ?>
 
 <!-- Why Choose WP EasySoft -->
-<section class="py-16 bg-gray-50" aria-labelledby="why-choose-title">
+<section class="py-16 bg-gray-50 not-prose" aria-labelledby="why-choose-title">
   <div class="container mx-auto px-4">
     <!-- Title -->
     <h2 id="why-choose-title" class="text-3xl md:text-4xl font-bold text-center mb-12">

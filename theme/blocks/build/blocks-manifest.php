@@ -317,7 +317,7 @@ return array(
 		'title' => 'Testimonials',
 		'category' => 'layout',
 		'icon' => 'testimonial',
-		'description' => 'Display customer testimonials and reviews in a beautiful layout.',
+		'description' => 'Display customer testimonials and reviews in a beautiful grid layout.',
 		'keywords' => array(
 			'testimonials',
 			'reviews',
@@ -363,9 +363,9 @@ return array(
 					)
 				)
 			),
-			'layout' => array(
+			'columns' => array(
 				'type' => 'string',
-				'default' => 'grid'
+				'default' => '3'
 			),
 			'backgroundColor' => array(
 				'type' => 'string',

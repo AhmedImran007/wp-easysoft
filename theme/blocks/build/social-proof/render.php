@@ -10,7 +10,7 @@ $features = $attributes['features'] ?? [
 ?>
 
 <!-- Social Proof Section -->
-<section class="max-w-full py-12 bg-white"
+<section class="max-w-full py-12 bg-white not-prose"
   aria-label="<?php esc_attr_e('Key Features and Compatibility', 'wp-easysoft'); ?>">
   <div class="container mx-auto px-4">
     <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">

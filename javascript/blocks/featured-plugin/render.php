@@ -18,7 +18,7 @@ $imageAlt            = $attributes['imageAlt'] ?? 'Easy Map Interface';
 ?>
 
 <!-- Featured Plugin Section -->
-<section class="max-w-full py-16 bg-gray-50" aria-labelledby="featured-plugin-title">
+<section class="max-w-full py-16 bg-gray-50 not-prose" aria-labelledby="featured-plugin-title">
   <div class="container mx-auto px-4">
     <div class="max-w-5xl mx-auto">
       <!-- Title -->

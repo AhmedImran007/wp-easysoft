@@ -2,55 +2,58 @@
 /**
  * Template part for displaying single posts
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
  * @package WP_EasySoft
  */
-
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class('prose lg:prose-lg max-w-full mb-12'); ?>>
 
-	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+	<!-- Post Header -->
+	<header class="entry-header mb-6">
+		<?php
+		the_title(
+			'<h1 class="entry-title text-4xl font-extrabold leading-tight text-gray-900">',
+			'</h1>'
+		);
+		?>
 
-		<?php if ( ! is_page() ) : ?>
-			<div class="entry-meta">
+		<?php if (!is_page()): ?>
+			<div class="entry-meta mt-2 text-sm text-gray-500">
 				<?php wp_easysoft_entry_meta(); ?>
-			</div><!-- .entry-meta -->
+			</div>
 		<?php endif; ?>
-	</header><!-- .entry-header -->
+	</header>
 
-	<?php wp_easysoft_post_thumbnail(); ?>
+	<!-- Featured Image -->
+	<?php if (has_post_thumbnail()): ?>
+		<div class="mb-6">
+			<?php wp_easysoft_post_thumbnail(); ?>
+		</div>
+	<?php endif; ?>
 
-	<div <?php wp_easysoft_content_class( 'entry-content' ); ?>>
+	<!-- Post Content -->
+	<div <?php wp_easysoft_content_class('entry-content text-gray-800 leading-relaxed'); ?>>
 		<?php
 		the_content(
 			sprintf(
 				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers. */
-					__( 'Continue reading<span class="sr-only"> "%s"</span>', 'wp-easysoft' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
+					__('Continue reading<span class="sr-only"> "%s"</span>', 'wp-easysoft'),
+					array('span' => array('class' => array()))
 				),
 				get_the_title()
 			)
 		);
 
-		wp_link_pages(
-			array(
-				'before' => '<div>' . __( 'Pages:', 'wp-easysoft' ),
-				'after'  => '</div>',
-			)
-		);
+		wp_link_pages(array(
+			'before' => '<div class="page-links mt-6 text-sm font-medium text-gray-600">' . __('Pages:', 'wp-easysoft'),
+			'after'  => '</div>',
+		));
 		?>
-	</div><!-- .entry-content -->
+	</div>
 
-	<footer class="entry-footer">
+	<!-- Post Footer -->
+	<footer class="entry-footer mt-10 border-t border-gray-200 pt-6 text-sm text-gray-500">
 		<?php wp_easysoft_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
+	</footer>
 
-</article><!-- #post-${ID} -->
+</article>

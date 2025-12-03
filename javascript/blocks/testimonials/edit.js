@@ -10,11 +10,10 @@ import {
 	Button,
 	SelectControl,
 	RangeControl,
-	ToggleControl,
 } from '@wordpress/components';
 
 export default function Edit({ attributes, setAttributes }) {
-	const { title, description, testimonials, layout, backgroundColor } =
+	const { title, description, testimonials, columns, backgroundColor } =
 		attributes;
 
 	const blockProps = useBlockProps({
@@ -67,6 +66,12 @@ export default function Edit({ attributes, setAttributes }) {
 		return stars;
 	};
 
+	// Grid classes based on columns
+	const gridClasses = {
+		2: 'grid md:grid-cols-2 gap-8',
+		3: 'grid md:grid-cols-2 lg:grid-cols-3 gap-8',
+	};
+
 	return (
 		<>
 			<InspectorControls>
@@ -75,20 +80,19 @@ export default function Edit({ attributes, setAttributes }) {
 					initialOpen={true}
 				>
 					<SelectControl
-						label={__('Layout', 'wp-easysoft')}
-						value={layout}
+						label={__('Columns', 'wp-easysoft')}
+						value={columns}
 						options={[
-							{ label: __('Grid', 'wp-easysoft'), value: 'grid' },
 							{
-								label: __('Carousel', 'wp-easysoft'),
-								value: 'carousel',
+								label: __('2 Columns', 'wp-easysoft'),
+								value: '2',
 							},
 							{
-								label: __('Masonry', 'wp-easysoft'),
-								value: 'masonry',
+								label: __('3 Columns', 'wp-easysoft'),
+								value: '3',
 							},
 						]}
-						onChange={(value) => setAttributes({ layout: value })}
+						onChange={(value) => setAttributes({ columns: value })}
 					/>
 
 					<SelectControl
@@ -104,7 +108,7 @@ export default function Edit({ attributes, setAttributes }) {
 								value: 'bg-gray-50',
 							},
 							{
-								label: __('Primary', 'wp-easysoft'),
+								label: __('Primary Light', 'wp-easysoft'),
 								value: 'bg-primary-50',
 							},
 						]}
@@ -315,19 +319,11 @@ export default function Edit({ attributes, setAttributes }) {
 					</div>
 
 					{/* Testimonials Grid */}
-					<div
-						className={`testimonials-grid ${
-							layout === 'grid'
-								? 'grid gap-8 md:grid-cols-2 lg:grid-cols-3'
-								: layout === 'masonry'
-									? 'columns-1 gap-8 space-y-8 md:columns-2 lg:columns-3'
-									: 'flex gap-6 overflow-x-auto pb-6'
-						}`}
-					>
+					<div className={gridClasses[columns]}>
 						{testimonials.map((testimonial, index) => (
 							<div
 								key={index}
-								className={`rounded-xl border border-gray-100 bg-white p-6 shadow-lg ${layout === 'carousel' ? 'min-w-[350px] flex-shrink-0' : ''} transition-all duration-300 hover:shadow-xl`}
+								className="rounded-xl border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl"
 							>
 								{/* Rating */}
 								<div className="mb-4 flex gap-1">
@@ -432,16 +428,6 @@ export default function Edit({ attributes, setAttributes }) {
 							</div>
 						))}
 					</div>
-
-					{/* Layout Notice */}
-					{layout === 'carousel' && (
-						<div className="mt-6 text-center text-sm text-gray-500">
-							{__(
-								'← Scroll to see more testimonials →',
-								'wp-easysoft'
-							)}
-						</div>
-					)}
 				</div>
 			</section>
 		</>

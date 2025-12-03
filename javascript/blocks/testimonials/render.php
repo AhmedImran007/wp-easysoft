@@ -27,25 +27,26 @@ $testimonials    = $attributes['testimonials'] ?? [
     'avatar'  => ''
   ]
 ];
-$layout          = $attributes['layout'] ?? 'grid';
+$columns         = $attributes['columns'] ?? '3';
 $backgroundColor = $attributes['backgroundColor'] ?? 'bg-white';
 
-// Helper function to render stars
-function render_testimonial_stars($rating)
-{
-  $stars = '';
-  for ($i = 1; $i <= 5; $i++) {
-    $star_class  = $i <= $rating ? 'text-yellow-400' : 'text-gray-300';
-    $stars      .= '<i class="fas fa-star ' . $star_class . '" aria-hidden="true"></i>';
+// Helper function to render stars - check if function exists first
+if (!function_exists('render_testimonial_stars')) {
+  function render_testimonial_stars($rating)
+  {
+    $stars = '';
+    for ($i = 1; $i <= 5; $i++) {
+      $star_class  = $i <= $rating ? 'text-yellow-400' : 'text-gray-300';
+      $stars      .= '<i class="fas fa-star ' . $star_class . '" aria-hidden="true"></i>';
+    }
+    return $stars;
   }
-  return $stars;
 }
 
-// Layout classes
-$layout_classes = [
-  'grid'     => 'grid md:grid-cols-2 lg:grid-cols-3 gap-8',
-  'masonry'  => 'columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8',
-  'carousel' => 'flex overflow-x-auto gap-6 pb-6'
+// Grid classes based on columns
+$gridClasses = [
+  '2' => 'grid md:grid-cols-2 gap-8',
+  '3' => 'grid md:grid-cols-2 lg:grid-cols-3 gap-8'
 ];
 ?>
 
@@ -63,13 +64,10 @@ $layout_classes = [
     </div>
 
     <!-- Testimonials Grid -->
-    <div class="<?php echo esc_attr($layout_classes[$layout]); ?>">
+    <div class="<?php echo esc_attr($gridClasses[$columns]); ?>">
       <?php foreach ($testimonials as $index => $testimonial): ?>
-        <div class="
-                    bg-white rounded-xl shadow-lg p-6 border border-gray-100
-                    <?php echo $layout === 'carousel' ? 'min-w-[350px] flex-shrink-0' : ''; ?>
-                    transition-all duration-300 hover:shadow-xl
-                " aria-labelledby="testimonial-<?php echo $index; ?>">
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl"
+          aria-labelledby="testimonial-<?php echo $index; ?>">
           <!-- Rating -->
           <div class="flex gap-1 mb-4"
             aria-label="<?php printf(esc_attr__('Rated %d out of 5 stars', 'wp-easysoft'), $testimonial['rating']); ?>">
@@ -110,12 +108,5 @@ $layout_classes = [
         </div>
       <?php endforeach; ?>
     </div>
-
-    <!-- Carousel Notice -->
-    <?php if ($layout === 'carousel'): ?>
-      <div class="text-center mt-6 text-sm text-gray-500" aria-hidden="true">
-        <?php esc_html_e('← Scroll to see more testimonials →', 'wp-easysoft'); ?>
-      </div>
-    <?php endif; ?>
   </div>
 </section>

@@ -2,39 +2,37 @@
 /**
  * The template for displaying all pages
  *
- * This is the template that displays all pages by default. Please note that
- * this is the WordPress construct of pages: specifically, posts with a post
- * type of `page`.
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
  * @package WP_EasySoft
  */
 
 get_header();
 ?>
 
-	<section id="primary">
-		<main id="main">
+<section id="primary" class="bg-gray-50">
+	<main id="main" class="container">
 
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+		<?php
+		/* Start the Loop */
+		while (have_posts()):
+			the_post();
 
-				get_template_part( 'template-parts/content/content', 'page' );
+			// Page content wrapper with Tailwind prose + spacing
+			echo '<div class="prose prose-lg max-w-full mx-auto mb-12">';
+			get_template_part('template-parts/content/content', 'page');
+			echo '</div>';
 
-				// If comments are open, or we have at least one comment, load
-				// the comment template.
-				if ( comments_open() || get_comments_number() ) {
-					comments_template();
-				}
+			// Comments section styling
+			if (comments_open() || get_comments_number()) {
+				echo '<div class="max-w-4xl mx-auto mt-8 bg-white shadow rounded-xl p-6">';
+				comments_template();
+				echo '</div>';
+			}
 
-			endwhile; // End of the loop.
-			?>
+		endwhile;
+		?>
 
-		</main><!-- #main -->
-	</section><!-- #primary -->
+	</main>
+</section>
 
 <?php
 get_footer();

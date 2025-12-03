@@ -15,7 +15,7 @@ $plugins             = $attributes['plugins'] ?? [
 ?>
 
 <!-- Hero Section -->
-<section class="max-w-full gradient-bg text-white py-20" aria-labelledby="wp-easysoft-hero-title">
+<section class="max-w-full gradient-bg text-white py-20 not-prose" aria-labelledby="wp-easysoft-hero-title">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto text-center">
       <!-- Title -->
