@@ -1,0 +1,64 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wp-easysoft/faq",
+	"title": "FAQ Section",
+	"category": "layout",
+	"icon": "editor-help",
+	"description": "A frequently asked questions section with expandable answers using Alpine.js.",
+	"keywords": ["faq", "questions", "help", "support", "accordion", "alpine"],
+	"textdomain": "wp-easysoft",
+
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Frequently Asked Questions"
+		},
+		"description": {
+			"type": "string",
+			"default": "Quick answers to common support questions"
+		},
+		"faqs": {
+			"type": "array",
+			"default": [
+				{
+					"question": "How long does it take to get a response?",
+					"answer": "Response times vary by priority level: Critical issues within 2 hours, High within 6 hours, Medium within 24 hours, and Low within 48 hours. PRO users receive priority support with faster response times.",
+					"open": false
+				},
+				{
+					"question": "Do you offer phone support?",
+					"answer": "We currently offer support through tickets, live chat, and our community forum. Phone support is available for Enterprise customers with custom agreements.",
+					"open": false
+				},
+				{
+					"question": "What information should I include in my support ticket?",
+					"answer": "Please include: WordPress version, PHP version, plugin version, detailed description of the issue, steps to reproduce, any error messages, and screenshots if applicable. The more detail you provide, the faster we can help.",
+					"open": false
+				},
+				{
+					"question": "Is there a limit to support tickets?",
+					"answer": "PRO users have unlimited support tickets. Free users can submit up to 3 tickets per month. Community forum is always available for unlimited questions.",
+					"open": false
+				},
+				{
+					"question": "Do you help with custom development?",
+					"answer": "Yes! We offer custom development services for WordPress plugin customization and new feature development. Contact us with your requirements for a quote.",
+					"open": false
+				}
+			]
+		},
+		"accordionMode": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+
+	"supports": {
+		"align": ["wide", "full"],
+		"html": false
+	},
+
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

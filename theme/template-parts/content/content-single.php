@@ -9,12 +9,18 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class('prose lg:prose-lg max-w-full mb-12'); ?>>
 
 	<!-- Post Header -->
+	<!-- Post Header -->
 	<header class="entry-header mb-6">
 		<?php
-		the_title(
-			'<h1 class="entry-title text-4xl font-extrabold leading-tight text-gray-900">',
-			'</h1>'
-		);
+		// Check if title is disabled
+		$disable_title = get_post_meta(get_the_ID(), '_wp_easysoft_disable_title', true);
+
+		if (!$disable_title) {
+			the_title(
+				'<h1 class="entry-title text-4xl font-extrabold leading-tight text-gray-900">',
+				'</h1>'
+			);
+		}
 		?>
 
 		<?php if (!is_page()): ?>
@@ -23,6 +29,7 @@
 			</div>
 		<?php endif; ?>
 	</header>
+
 
 	<!-- Featured Image -->
 	<?php if (has_post_thumbnail()): ?>

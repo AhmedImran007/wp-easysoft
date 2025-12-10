@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/contact-hero",
+  "title": "Contact Page Hero",
+  "category": "layout",
+  "icon": "email",
+  "description": "A hero section for contact pages with support statistics.",
+  "keywords": [
+    "contact",
+    "hero",
+    "support",
+    "stats",
+    "help"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "How Can We Help You?"
+    },
+    "description": {
+      "type": "string",
+      "default": "Our dedicated support team is here to help you succeed with our WordPress plugins. Multiple ways to get the assistance you need."
+    },
+    "stats": {
+      "type": "array",
+      "default": [
+        {
+          "value": "24h",
+          "label": "Average Response Time"
+        },
+        {
+          "value": "98%",
+          "label": "Customer Satisfaction"
+        },
+        {
+          "value": "1000+",
+          "label": "Tickets Resolved"
+        }
+      ]
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

@@ -2,7 +2,7 @@
 /**
  * Search Results Template
  *
- * @package _tw
+ * @package _WP_EasySoft
  */
 
 get_header();

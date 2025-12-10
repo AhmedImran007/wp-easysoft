@@ -51,7 +51,8 @@ $gridClasses = [
 ?>
 
 <!-- Testimonials Section -->
-<section class="max-w-full py-16 <?php echo esc_attr($backgroundColor); ?>" aria-labelledby="testimonials-title">
+<section class="max-w-full py-16 not-prose <?php echo esc_attr($backgroundColor); ?>"
+  aria-labelledby="testimonials-title">
   <div class="container mx-auto px-4">
     <!-- Header -->
     <div class="text-center mb-12">

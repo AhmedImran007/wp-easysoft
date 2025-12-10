@@ -15,18 +15,25 @@
 			echo '<span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-200 text-yellow-800 rounded mb-2">Featured</span>';
 		}
 
-		if (is_singular()):
-			the_title('<h1 class="entry-title text-3xl font-bold text-gray-900">', '</h1>');
-		else:
-			the_title(
-				sprintf(
-					'<h2 class="entry-title text-2xl font-semibold text-gray-900 hover:text-blue-600 transition">
+		// Check per-page/post title disable option
+		$disable_title = get_post_meta(get_the_ID(), '_wp_easysoft_disable_title', true);
+
+		if (!$disable_title) {
+
+			if (is_singular()):
+				the_title('<h1 class="entry-title text-3xl font-bold text-gray-900">', '</h1>');
+			else:
+				the_title(
+					sprintf(
+						'<h2 class="entry-title text-2xl font-semibold text-gray-900 hover:text-blue-600 transition">
                         <a href="%s" rel="bookmark">',
-					esc_url(get_permalink())
-				),
-				'</a></h2>'
-			);
-		endif;
+						esc_url(get_permalink())
+					),
+					'</a></h2>'
+				);
+			endif;
+
+		}
 		?>
 	</header>
 

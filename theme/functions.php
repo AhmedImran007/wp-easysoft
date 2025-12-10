@@ -380,193 +380,6 @@ class WPES_Dropdown_Walker extends Walker_Nav_Menu
 	}
 }
 
-// Register Custom Post Type: WP Plugin
-function wp_easysoft_register_wp_plugin_post_type()
-{
-	$labels = array(
-		'name'                  => _x('WP Plugins', 'Post Type General Name', 'wp-easysoft'),
-		'singular_name'         => _x('WP Plugin', 'Post Type Singular Name', 'wp-easysoft'),
-		'menu_name'             => __('WP Plugins', 'wp-easysoft'),
-		'name_admin_bar'        => __('WP Plugin', 'wp-easysoft'),
-		'archives'              => __('WP Plugin Archives', 'wp-easysoft'),
-		'attributes'            => __('WP Plugin Attributes', 'wp-easysoft'),
-		'parent_item_colon'     => __('Parent WP Plugin:', 'wp-easysoft'),
-		'all_items'             => __('All WP Plugins', 'wp-easysoft'),
-		'add_new_item'          => __('Add New WP Plugin', 'wp-easysoft'),
-		'add_new'               => __('Add New', 'wp-easysoft'),
-		'new_item'              => __('New WP Plugin', 'wp-easysoft'),
-		'edit_item'             => __('Edit WP Plugin', 'wp-easysoft'),
-		'update_item'           => __('Update WP Plugin', 'wp-easysoft'),
-		'view_item'             => __('View WP Plugin', 'wp-easysoft'),
-		'view_items'            => __('View WP Plugins', 'wp-easysoft'),
-		'search_items'          => __('Search WP Plugin', 'wp-easysoft'),
-		'not_found'             => __('Not found', 'wp-easysoft'),
-		'not_found_in_trash'    => __('Not found in Trash', 'wp-easysoft'),
-		'featured_image'        => __('WP Plugin Icon', 'wp-easysoft'),
-		'set_featured_image'    => __('Set plugin icon', 'wp-easysoft'),
-		'remove_featured_image' => __('Remove plugin icon', 'wp-easysoft'),
-		'use_featured_image'    => __('Use as plugin icon', 'wp-easysoft'),
-		'insert_into_item'      => __('Insert into plugin', 'wp-easysoft'),
-		'uploaded_to_this_item' => __('Uploaded to this plugin', 'wp-easysoft'),
-		'items_list'            => __('WP Plugins list', 'wp-easysoft'),
-		'items_list_navigation' => __('WP Plugins list navigation', 'wp-easysoft'),
-		'filter_items_list'     => __('Filter plugins list', 'wp-easysoft'),
-	);
-
-	$args = array(
-		'label'               => __('WP Plugin', 'wp-easysoft'),
-		'description'         => __('WordPress Plugin Showcase', 'wp-easysoft'),
-		'labels'              => $labels,
-		'supports'            => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
-		'taxonomies'          => array('wp_plugin_category'),
-		'hierarchical'        => false,
-		'public'              => true,
-		'show_ui'             => true,
-		'show_in_menu'        => true,
-		'menu_position'       => 5,
-		'menu_icon'           => 'dashicons-admin-plugins',
-		'show_in_admin_bar'   => true,
-		'show_in_nav_menus'   => true,
-		'can_export'          => true,
-		'has_archive'         => true,
-		'exclude_from_search' => false,
-		'publicly_queryable'  => true,
-		'capability_type'     => 'post',
-		'show_in_rest'        => true,
-	);
-
-	register_post_type('wp_plugin', $args);
-}
-add_action('init', 'wp_easysoft_register_wp_plugin_post_type', 0);
-
-// Register Custom Taxonomy for WP Plugin Categories
-function wp_easysoft_register_wp_plugin_taxonomy()
-{
-	$labels = array(
-		'name'                       => _x('WP Plugin Categories', 'Taxonomy General Name', 'wp-easysoft'),
-		'singular_name'              => _x('WP Plugin Category', 'Taxonomy Singular Name', 'wp-easysoft'),
-		'menu_name'                  => __('Categories', 'wp-easysoft'),
-		'all_items'                  => __('All Categories', 'wp-easysoft'),
-		'parent_item'                => __('Parent Category', 'wp-easysoft'),
-		'parent_item_colon'          => __('Parent Category:', 'wp-easysoft'),
-		'new_item_name'              => __('New Category Name', 'wp-easysoft'),
-		'add_new_item'               => __('Add New Category', 'wp-easysoft'),
-		'edit_item'                  => __('Edit Category', 'wp-easysoft'),
-		'update_item'                => __('Update Category', 'wp-easysoft'),
-		'view_item'                  => __('View Category', 'wp-easysoft'),
-		'separate_items_with_commas' => __('Separate categories with commas', 'wp-easysoft'),
-		'add_or_remove_items'        => __('Add or remove categories', 'wp-easysoft'),
-		'choose_from_most_used'      => __('Choose from the most used', 'wp-easysoft'),
-		'popular_items'              => __('Popular Categories', 'wp-easysoft'),
-		'search_items'               => __('Search Categories', 'wp-easysoft'),
-		'not_found'                  => __('Not Found', 'wp-easysoft'),
-		'no_terms'                   => __('No categories', 'wp-easysoft'),
-		'items_list'                 => __('Categories list', 'wp-easysoft'),
-		'items_list_navigation'      => __('Categories list navigation', 'wp-easysoft'),
-	);
-
-	$args = array(
-		'labels'            => $labels,
-		'hierarchical'      => true,
-		'public'            => true,
-		'show_ui'           => true,
-		'show_admin_column' => true,
-		'show_in_nav_menus' => true,
-		'show_tagcloud'     => true,
-		'show_in_rest'      => true,
-	);
-
-	register_taxonomy('wp_plugin_category', array('wp_plugin'), $args);
-}
-add_action('init', 'wp_easysoft_register_wp_plugin_taxonomy', 0);
-
-// Add meta fields for wp_plugins
-function wp_easysoft_add_wp_plugin_meta_boxes()
-{
-	add_meta_box(
-		'wp_plugin_details',
-		__('WP Plugin Details', 'wp-easysoft'),
-		'wp_easysoft_wp_plugin_meta_box_callback',
-		'wp_plugin',
-		'normal',
-		'high'
-	);
-}
-add_action('add_meta_boxes', 'wp_easysoft_add_wp_plugin_meta_boxes');
-
-function wp_easysoft_wp_plugin_meta_box_callback($post)
-{
-	wp_nonce_field('wp_easysoft_save_wp_plugin_meta', 'wp_easysoft_wp_plugin_meta_nonce');
-
-	$has_pro          = get_post_meta($post->ID, 'has_pro', true);
-	$active_installs  = get_post_meta($post->ID, 'active_installs', true);
-	$free_version_url = get_post_meta($post->ID, 'free_version_url', true);
-	$pro_version_url  = get_post_meta($post->ID, 'pro_version_url', true);
-	?>
-	<div style="display: grid; gap: 12px;">
-		<p>
-			<label for="has_pro" style="display: block; margin-bottom: 4px;">
-				<input type="checkbox" id="has_pro" name="has_pro" value="1" <?php checked($has_pro, '1'); ?> />
-				<?php _e('Has PRO version available', 'wp-easysoft'); ?>
-			</label>
-		</p>
-
-		<p>
-			<label for="active_installs" style="display: block; margin-bottom: 4px;">
-				<?php _e('Active Installs', 'wp-easysoft'); ?>
-			</label>
-			<input type="text" id="active_installs" name="active_installs" value="<?php echo esc_attr($active_installs); ?>"
-				class="widefat" placeholder="e.g., 90+ Active Installs" />
-		</p>
-
-		<p>
-			<label for="free_version_url" style="display: block; margin-bottom: 4px;">
-				<?php _e('Free Version URL', 'wp-easysoft'); ?>
-			</label>
-			<input type="url" id="free_version_url" name="free_version_url" value="<?php echo esc_attr($free_version_url); ?>"
-				class="widefat" placeholder="https://wordpress.org/plugins/..." />
-		</p>
-
-		<p>
-			<label for="pro_version_url" style="display: block; margin-bottom: 4px;">
-				<?php _e('PRO Version URL', 'wp-easysoft'); ?>
-			</label>
-			<input type="url" id="pro_version_url" name="pro_version_url" value="<?php echo esc_attr($pro_version_url); ?>"
-				class="widefat" placeholder="https://your-site.com/pro-version" />
-		</p>
-	</div>
-	<?php
-}
-
-function wp_easysoft_save_wp_plugin_meta($post_id)
-{
-	if (
-		!isset($_POST['wp_easysoft_wp_plugin_meta_nonce']) ||
-		!wp_verify_nonce($_POST['wp_easysoft_wp_plugin_meta_nonce'], 'wp_easysoft_save_wp_plugin_meta')
-	) {
-		return;
-	}
-
-	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-		return;
-	}
-
-	if (!current_user_can('edit_post', $post_id)) {
-		return;
-	}
-
-	$fields = ['has_pro', 'active_installs', 'free_version_url', 'pro_version_url'];
-
-	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
-			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
-		} else {
-			delete_post_meta($post_id, $field);
-		}
-	}
-}
-add_action('save_post_wp_plugin', 'wp_easysoft_save_wp_plugin_meta');
-
 /**
  * Add Featured Post Meta Box
  */
@@ -890,3 +703,392 @@ function wp_easysoft_validate_social_urls($errors, $update, $user)
 	return $errors;
 }
 
+/**
+ * Functions which enhance the theme by cpt into WordPress.
+ */
+require get_template_directory() . '/inc/cpt-plugin.php';
+
+/**
+ * Functions which enhance the theme by pricing page into WordPress.
+ */
+require get_template_directory() . '/inc/pricing-meta.php';
+
+// Add Page Title Toggle Meta Box
+function wp_easysoft_page_title_metabox()
+{
+	add_meta_box(
+		'wp_easysoft_page_title_toggle',
+		__('Page Title Settings', 'wp-easysoft'),
+		'wp_easysoft_page_title_metabox_callback',
+		'page',
+		'side',
+		'high'
+	);
+}
+add_action('add_meta_boxes', 'wp_easysoft_page_title_metabox');
+
+
+function wp_easysoft_page_title_metabox_callback($post)
+{
+	$value = get_post_meta($post->ID, '_wp_easysoft_disable_title', true);
+
+	wp_nonce_field('wp_easysoft_save_title_toggle', 'wp_easysoft_title_toggle_nonce');
+	?>
+	<p>
+		<label>
+			<input type="checkbox" name="wp_easysoft_disable_title" value="1" <?php checked($value, '1'); ?>>
+			<?php _e('Disable Page Title', 'wp-easysoft'); ?>
+		</label>
+	</p>
+	<?php
+}
+
+
+function wp_easysoft_page_title_metabox_save($post_id)
+{
+
+	if (
+		!isset($_POST['wp_easysoft_title_toggle_nonce']) ||
+		!wp_verify_nonce($_POST['wp_easysoft_title_toggle_nonce'], 'wp_easysoft_save_title_toggle')
+	) {
+		return;
+	}
+
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+		return;
+
+	if (isset($_POST['wp_easysoft_disable_title'])) {
+		update_post_meta($post_id, '_wp_easysoft_disable_title', '1');
+	} else {
+		delete_post_meta($post_id, '_wp_easysoft_disable_title');
+	}
+}
+add_action('save_post', 'wp_easysoft_page_title_metabox_save');
+
+
+/**
+ * Enqueue Font Awesome
+ */
+function wp_easysoft_enqueue_font_awesome()
+{
+	// Enqueue Font Awesome from CDN
+	wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', array(), '6.4.0');
+}
+add_action('wp_enqueue_scripts', 'wp_easysoft_enqueue_font_awesome');
+
+/**
+ * Register footer widget areas
+ */
+function wp_easysoft_footer_widgets_init()
+{
+	// About/Brand Section
+	register_sidebar(array(
+		'name'          => __('Footer About Section', 'wp-easysoft'),
+		'id'            => 'footer-about',
+		'description'   => __('Add logo, description, social icons, and email.', 'wp-easysoft'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s footer-widget">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h3 class="footer-widget-title text-white font-bold text-lg relative inline-block">',
+		'after_title'   => '<span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 transform translate-y-1"></span></h3>',
+	));
+
+	// Products Section
+	register_sidebar(array(
+		'name'          => __('Footer Products', 'wp-easysoft'),
+		'id'            => 'footer-products',
+		'description'   => __('Add products menu or links.', 'wp-easysoft'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s footer-widget">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h3 class="footer-widget-title text-white font-bold text-lg relative inline-block">',
+		'after_title'   => '<span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 transform translate-y-1"></span></h3>',
+	));
+
+	// Support Section
+	register_sidebar(array(
+		'name'          => __('Footer Support', 'wp-easysoft'),
+		'id'            => 'footer-support',
+		'description'   => __('Add support menu or links.', 'wp-easysoft'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s footer-widget">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h3 class="footer-widget-title text-white font-bold text-lg relative inline-block">',
+		'after_title'   => '<span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 transform translate-y-1"></span></h3>',
+	));
+
+	// Legal Section
+	register_sidebar(array(
+		'name'          => __('Footer Legal', 'wp-easysoft'),
+		'id'            => 'footer-legal',
+		'description'   => __('Add legal menu or links.', 'wp-easysoft'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s footer-widget">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h3 class="footer-widget-title text-white font-bold text-lg relative inline-block">',
+		'after_title'   => '<span class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 transform translate-y-1"></span></h3>',
+	));
+
+	// Copyright Section
+	register_sidebar(array(
+		'name'          => __('Footer Copyright', 'wp-easysoft'),
+		'id'            => 'footer-copyright',
+		'description'   => __('Add copyright text.', 'wp-easysoft'),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<div class="hidden">',
+		'after_title'   => '</div>',
+	));
+}
+add_action('widgets_init', 'wp_easysoft_footer_widgets_init');
+
+/**
+ * Register footer navigation menus
+ */
+function wp_easysoft_register_footer_menus()
+{
+	register_nav_menus(array(
+		'footer-products' => __('Footer Products Menu', 'wp-easysoft'),
+		'footer-support'  => __('Footer Support Menu', 'wp-easysoft'),
+		'footer-legal'    => __('Footer Legal Menu', 'wp-easysoft'),
+	));
+}
+add_action('after_setup_theme', 'wp_easysoft_register_footer_menus');
+
+/**
+ * Custom CSS for footer styling
+ */
+function wp_easysoft_footer_styles()
+{
+	?>
+	<style>
+		/* Reset for all footer menus */
+		.footer-widget ul,
+		.footer-widget .menu,
+		.footer-menu-list {
+			list-style: none !important;
+			padding: 0 !important;
+			margin: 0 !important;
+			margin-left: -1rem !important
+		}
+
+		.footer-widget ul li,
+		.footer-widget .menu li,
+		.footer-menu-list li {
+			display: block !important;
+			margin: 0 0 8px 0 !important;
+			padding: 0 !important;
+		}
+
+		.footer-widget ul li:last-child,
+		.footer-widget .menu li:last-child,
+		.footer-menu-list li:last-child {
+			margin-bottom: 0 !important;
+		}
+
+		/* Link styling - works for both theme menus and widget menus */
+		.footer-menu-link,
+		.footer-widget a:not(.social-icon):not(.footer-email),
+		.footer-widget .menu a,
+		.footer-widget ul a,
+		#footer-products a:not([class*="footer-widget-title"]),
+		#footer-support a:not([class*="footer-widget-title"]),
+		#footer-legal a:not([class*="footer-widget-title"]),
+		.widget_nav_menu ul li a {
+			display: flex !important;
+			align-items: center !important;
+			gap: 2px !important;
+			color: #9ca3af !important;
+			text-decoration: none !important;
+			padding: 0 !important;
+			transition: all 0.3s ease !important;
+			position: relative !important;
+		}
+
+		/* Hover effects */
+		.footer-menu-link:hover,
+		.footer-widget a:not(.social-icon):not(.footer-email):hover,
+		.footer-widget .menu a:hover,
+		.footer-widget ul a:hover,
+		#footer-products a:not([class*="footer-widget-title"]):hover,
+		#footer-support a:not([class*="footer-widget-title"]):hover,
+		#footer-legal a:not([class*="footer-widget-title"]):hover,
+		.widget_nav_menu ul li a:hover {
+			color: white !important;
+			transform: translateX(4px) !important;
+		}
+
+		/* Bullet styling */
+		.footer-menu-bullet {
+			width: 6px !important;
+			height: 6px !important;
+			border-radius: 50% !important;
+			opacity: 0 !important;
+			transition: opacity 0.3s ease !important;
+			flex-shrink: 0 !important;
+			display: inline-block !important;
+		}
+
+		/* Show bullet on hover */
+		.footer-menu-link:hover .footer-menu-bullet,
+		.footer-widget a:not(.social-icon):not(.footer-email):hover .footer-menu-bullet,
+		.footer-widget a:not(.social-icon):not(.footer-email):hover::before,
+		.footer-widget .menu a:hover::before,
+		.footer-widget ul a:hover::before,
+		#footer-products a:not([class*="footer-widget-title"]):hover::before,
+		#footer-support a:not([class*="footer-widget-title"]):hover::before,
+		#footer-legal a:not([class*="footer-widget-title"]):hover::before,
+		.widget_nav_menu ul li a:hover::before {
+			opacity: 1 !important;
+		}
+
+		/* Add bullet via pseudo-element for theme menus */
+		.footer-widget .menu a::before,
+		.footer-widget ul a::before,
+		#footer-products a:not([class*="footer-widget-title"])::before,
+		#footer-support a:not([class*="footer-widget-title"])::before,
+		#footer-legal a:not([class*="footer-widget-title"])::before,
+		.widget_nav_menu ul li a::before {
+			content: '' !important;
+			width: 6px !important;
+			height: 6px !important;
+			border-radius: 50% !important;
+			opacity: 0 !important;
+			transition: opacity 0.3s ease !important;
+			flex-shrink: 0 !important;
+			display: inline-block !important;
+			margin-right: 8px !important;
+		}
+
+		/* Color coding for different sections */
+		.footer-menu-bullet.bg-indigo-500,
+		#footer-products .footer-menu-bullet,
+		#footer-products a:not([class*="footer-widget-title"])::before,
+		#footer-products .widget_nav_menu ul li a::before {
+			background-color: #6366f1 !important;
+		}
+
+		.footer-menu-bullet.bg-green-500,
+		#footer-support .footer-menu-bullet,
+		#footer-support a:not([class*="footer-widget-title"])::before,
+		#footer-support .widget_nav_menu ul li a::before {
+			background-color: #10b981 !important;
+		}
+
+		.footer-menu-bullet.bg-purple-500,
+		#footer-legal .footer-menu-bullet,
+		#footer-legal a:not([class*="footer-widget-title"])::before,
+		#footer-legal .widget_nav_menu ul li a::before {
+			background-color: #8b5cf6 !important;
+		}
+
+		/* Social icons */
+		.footer-social-icons {
+			display: flex !important;
+			gap: 12px !important;
+			margin: 16px 0 !important;
+		}
+
+		.footer-social-icons a.social-icon {
+			width: 36px !important;
+			height: 36px !important;
+			background-color: rgba(255, 255, 255, 0.05) !important;
+			border-radius: 8px !important;
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			transition: all 0.3s ease !important;
+			text-decoration: none !important;
+		}
+
+		.footer-social-icons a.social-icon:hover {
+			background-color: rgba(99, 102, 241, 0.2) !important;
+			transform: scale(1.1) !important;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+		}
+
+		.footer-social-icons i {
+			color: #d1d5db !important;
+			font-size: 14px !important;
+			transition: color 0.3s ease !important;
+		}
+
+		.footer-social-icons a.social-icon:hover i {
+			color: white !important;
+		}
+
+		/* Email */
+		a.footer-email {
+			display: flex !important;
+			align-items: center !important;
+			gap: 8px !important;
+			color: #9ca3af !important;
+			transition: color 0.3s ease !important;
+			margin-top: 12px !important;
+			text-decoration: none !important;
+		}
+
+		a.footer-email:hover {
+			color: white !important;
+		}
+
+		.footer-email i {
+			font-size: 14px !important;
+		}
+
+		.footer-email span {
+			font-size: 14px !important;
+		}
+
+		/* Fix for widget container */
+		.widget_nav_menu {
+			display: block !important;
+		}
+
+		/* Ensure no conflicts with other styles */
+		.footer-widget * {
+			box-sizing: border-box !important;
+		}
+
+		/* Footer widget title */
+		.footer-widget-title {
+			display: inline-block !important;
+			position: relative !important;
+		}
+
+		.footer-widget-title::after {
+			content: '' !important;
+			position: absolute !important;
+			bottom: -2px !important;
+			left: 0 !important;
+			width: 100% !important;
+			height: 2px !important;
+			background: linear-gradient(to right, #6366f1, #8b5cf6) !important;
+			transform: translateY(2px) !important;
+		}
+
+		/* Ensure proper spacing */
+		.footer-widget>*+* {
+			margin-top: 1.5rem !important;
+		}
+
+		.footer-widget>h3.footer-widget-title {
+			margin-bottom: 1.5rem !important;
+		}
+	</style>
+	<?php
+}
+add_action('wp_head', 'wp_easysoft_footer_styles');
+
+/**
+ * Filter widget output for better compatibility
+ */
+function wp_easysoft_filter_widget_output($content, $widget_instance)
+{
+	// Add wrapper to Navigation Menu widget
+	if (is_a($widget_instance, 'WP_Nav_Menu_Widget')) {
+		$content = str_replace(
+			'<nav',
+			'<nav class="footer-widget-menu"',
+			$content
+		);
+	}
+	return $content;
+}
+add_filter('widget_display_callback', 'wp_easysoft_filter_widget_output', 10, 2);

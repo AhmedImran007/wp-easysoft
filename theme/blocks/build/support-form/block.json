@@ -1,0 +1,78 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/support-form",
+  "title": "Support Ticket Form",
+  "category": "layout",
+  "icon": "forms",
+  "description": "A support ticket form with Contact Form 7 integration and customizable sidebar info.",
+  "keywords": [
+    "support",
+    "contact",
+    "form",
+    "ticket",
+    "cf7"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Submit a Support Ticket"
+    },
+    "description": {
+      "type": "string",
+      "default": "Fill out the form below and we'll get back to you as soon as possible"
+    },
+    "cf7Shortcode": {
+      "type": "string",
+      "default": ""
+    },
+    "proTips": {
+      "type": "array",
+      "default": [
+        "Include your WordPress version",
+        "Mention your PHP version",
+        "Describe steps to reproduce the issue",
+        "Include error messages if any"
+      ]
+    },
+    "responseTimes": {
+      "type": "array",
+      "default": [
+        {
+          "priority": "Critical",
+          "time": "Within 2 hours"
+        },
+        {
+          "priority": "High",
+          "time": "Within 6 hours"
+        },
+        {
+          "priority": "Medium",
+          "time": "Within 24 hours"
+        },
+        {
+          "priority": "Low",
+          "time": "Within 48 hours"
+        }
+      ]
+    },
+    "proSupportText": {
+      "type": "string",
+      "default": "PRO users get priority support with faster response times and dedicated assistance."
+    },
+    "proUpgradeLink": {
+      "type": "string",
+      "default": "#"
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

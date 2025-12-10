@@ -12,9 +12,18 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 	<?php if (!is_front_page()): ?>
-		<header class="entry-header">
-			<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
-		</header><!-- .entry-header -->
+
+		<?php
+		// Check if page title is disabled
+		$disable_title = get_post_meta(get_the_ID(), '_wp_easysoft_disable_title', true);
+		?>
+
+		<?php if (!$disable_title): ?>
+			<header class="entry-header">
+				<?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+			</header><!-- .entry-header -->
+		<?php endif; ?>
+
 	<?php endif; ?>
 
 	<?php wp_easysoft_post_thumbnail(); ?>
@@ -38,7 +47,6 @@
 			edit_post_link(
 				sprintf(
 					wp_kses(
-						/* translators: %s: Name of current post. Only visible to screen readers. */
 						__('Edit <span class="sr-only">%s</span>', 'wp-easysoft'),
 						array(
 							'span' => array(

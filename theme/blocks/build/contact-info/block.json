@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-easysoft/contact-info",
+  "title": "Contact Information",
+  "category": "layout",
+  "icon": "share",
+  "description": "Display contact information and social media links in a grid layout.",
+  "keywords": [
+    "contact",
+    "social",
+    "email",
+    "channels",
+    "info"
+  ],
+  "textdomain": "wp-easysoft",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Other Ways to Reach Us"
+    },
+    "description": {
+      "type": "string",
+      "default": "Multiple channels to stay connected and get updates"
+    },
+    "contactItems": {
+      "type": "array",
+      "default": [
+        {
+          "icon": "fas fa-envelope",
+          "title": "Email",
+          "subtitle": "General inquiries",
+          "linkText": "support@wpeasysoft.com",
+          "linkURL": "mailto:support@wpeasysoft.com",
+          "linkType": "email"
+        },
+        {
+          "icon": "fab fa-twitter",
+          "title": "Twitter",
+          "subtitle": "Updates and tips",
+          "linkText": "@wpeasysoft",
+          "linkURL": "#",
+          "linkType": "social"
+        },
+        {
+          "icon": "fab fa-facebook",
+          "title": "Facebook",
+          "subtitle": "Community updates",
+          "linkText": "WP EasySoft",
+          "linkURL": "#",
+          "linkType": "social"
+        },
+        {
+          "icon": "fab fa-youtube",
+          "title": "YouTube",
+          "subtitle": "Video tutorials",
+          "linkText": "WP EasySoft TV",
+          "linkURL": "#",
+          "linkType": "social"
+        }
+      ]
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

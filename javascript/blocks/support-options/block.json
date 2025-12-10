@@ -1,0 +1,91 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wp-easysoft/support-options",
+	"title": "Support Options",
+	"category": "layout",
+	"icon": "format-chat",
+	"description": "Display different support channels with features and action buttons.",
+	"keywords": ["support", "contact", "help", "channels", "options"],
+	"textdomain": "wp-easysoft",
+
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Choose Your Support Channel"
+		},
+		"description": {
+			"type": "string",
+			"default": "Different ways to get help based on your needs and urgency"
+		},
+		"options": {
+			"type": "array",
+			"default": [
+				{
+					"title": "Support Ticket",
+					"icon": "fas fa-ticket-alt",
+					"description": "Get personalized help from our expert team for complex issues",
+					"features": [
+						"Priority response for PRO users",
+						"Detailed troubleshooting",
+						"Screen sharing available"
+					],
+					"buttonText": "Open Ticket",
+					"buttonURL": "#ticket-form",
+					"buttonStyle": "primary",
+					"buttonAction": "link"
+				},
+				{
+					"title": "Live Chat",
+					"icon": "fas fa-comments",
+					"description": "Get instant help for quick questions and guidance",
+					"features": [
+						"Available weekdays 9-5 EST",
+						"Instant responses",
+						"Real-time collaboration"
+					],
+					"buttonText": "Start Chat",
+					"buttonURL": "#",
+					"buttonStyle": "success",
+					"buttonAction": "link"
+				},
+				{
+					"title": "Community Forum",
+					"icon": "fas fa-users",
+					"description": "Connect with other users and share solutions",
+					"features": [
+						"Free for everyone",
+						"Community knowledge base",
+						"User-generated solutions"
+					],
+					"buttonText": "Visit Forum",
+					"buttonURL": "#",
+					"buttonStyle": "outline",
+					"buttonAction": "link"
+				},
+				{
+					"title": "Documentation",
+					"icon": "fas fa-book",
+					"description": "Self-service guides and tutorials for all features",
+					"features": [
+						"Step-by-step guides",
+						"Video tutorials",
+						"Code examples"
+					],
+					"buttonText": "Browse Docs",
+					"buttonURL": "#",
+					"buttonStyle": "outline",
+					"buttonAction": "link"
+				}
+			]
+		}
+	},
+
+	"supports": {
+		"align": ["wide", "full"],
+		"html": false
+	},
+
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
