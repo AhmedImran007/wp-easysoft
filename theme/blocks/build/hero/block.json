@@ -37,31 +37,6 @@
     "secondaryButtonURL": {
       "type": "string",
       "default": "#"
-    },
-    "plugins": {
-      "type": "array",
-      "default": [
-        {
-          "name": "Easy Map",
-          "icon": "fas fa-map-marked-alt"
-        },
-        {
-          "name": "VideoJS Player",
-          "icon": "fas fa-video"
-        },
-        {
-          "name": "Data Sync",
-          "icon": "fas fa-sync"
-        },
-        {
-          "name": "Elementor Addons",
-          "icon": "fas fa-cube"
-        },
-        {
-          "name": "Product Gallery",
-          "icon": "fas fa-shopping-cart"
-        }
-      ]
     }
   },
   "supports": {

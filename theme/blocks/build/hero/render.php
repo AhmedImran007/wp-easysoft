@@ -5,13 +5,6 @@ $primaryButtonText   = $attributes['primaryButtonText'] ?? 'View All Plugins';
 $primaryButtonURL    = $attributes['primaryButtonURL'] ?? '#plugins';
 $secondaryButtonText = $attributes['secondaryButtonText'] ?? 'Get Easy Map PRO';
 $secondaryButtonURL  = $attributes['secondaryButtonURL'] ?? '#';
-$plugins             = $attributes['plugins'] ?? [
-  ['name' => 'Easy Map', 'icon' => 'fas fa-map-marked-alt'],
-  ['name' => 'VideoJS Player', 'icon' => 'fas fa-video'],
-  ['name' => 'Data Sync', 'icon' => 'fas fa-sync'],
-  ['name' => 'Elementor Addons', 'icon' => 'fas fa-cube'],
-  ['name' => 'Product Gallery', 'icon' => 'fas fa-shopping-cart'],
-];
 ?>
 
 <!-- Hero Section -->
@@ -41,24 +34,6 @@ $plugins             = $attributes['plugins'] ?? [
           aria-label="<?php echo esc_attr($secondaryButtonText); ?>">
           <?php echo esc_html($secondaryButtonText); ?>
         </a>
-      </div>
-
-      <!-- Plugins Showcase -->
-      <div class="mt-12 flex flex-col lg:flex-row justify-center items-center space-y-8 lg:space-y-0 lg:space-x-6">
-        <div class="text-center lg:text-left">
-          <img src="<?php echo esc_url('https://picsum.photos/seed/easymap/400/250.jpg'); ?>"
-            alt="<?php esc_attr_e('Easy Map Interface', 'wp-easysoft'); ?>"
-            class="rounded-lg shadow-xl w-full max-w-xs lg:max-w-sm">
-        </div>
-        <div class="flex flex-col space-y-4">
-          <?php foreach ($plugins as $plugin): ?>
-            <div
-              class="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex items-center space-x-3 transition-transform hover:scale-105">
-              <i class="<?php echo esc_attr($plugin['icon']); ?> text-2xl" aria-hidden="true"></i>
-              <span class="font-medium"><?php echo esc_html($plugin['name']); ?></span>
-            </div>
-          <?php endforeach; ?>
-        </div>
       </div>
     </div>
   </div>

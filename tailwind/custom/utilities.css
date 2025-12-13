@@ -94,3 +94,39 @@
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
 }
+
+/* Pricing Section Styles */
+.pricing-card {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pricing-card:hover {
+	transform: translateY(-5px);
+}
+
+.pricing-toggle-btn {
+	min-width: 140px;
+}
+
+.pricing-toggle-btn:hover {
+	background-color: #f3f4f6;
+}
+
+.pricing-plans {
+	transition: opacity 0.3s ease-in-out;
+}
+
+.pricing-plans.active {
+	animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

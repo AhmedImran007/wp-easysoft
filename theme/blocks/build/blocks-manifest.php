@@ -367,31 +367,6 @@ return array(
 			'secondaryButtonURL' => array(
 				'type' => 'string',
 				'default' => '#'
-			),
-			'plugins' => array(
-				'type' => 'array',
-				'default' => array(
-					array(
-						'name' => 'Easy Map',
-						'icon' => 'fas fa-map-marked-alt'
-					),
-					array(
-						'name' => 'VideoJS Player',
-						'icon' => 'fas fa-video'
-					),
-					array(
-						'name' => 'Data Sync',
-						'icon' => 'fas fa-sync'
-					),
-					array(
-						'name' => 'Elementor Addons',
-						'icon' => 'fas fa-cube'
-					),
-					array(
-						'name' => 'Product Gallery',
-						'icon' => 'fas fa-shopping-cart'
-					)
-				)
 			)
 		),
 		'supports' => array(

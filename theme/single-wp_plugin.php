@@ -144,9 +144,16 @@ $cta_footer_text     = $meta_fields['cta_footer_text'] ?: '30-day money-back gua
 
       <div class="relative">
         <div class="float-animation">
-          <?php if (has_post_thumbnail()): ?>
+          <?php
+          // Get the hero image from meta field
+          $hero_image = $meta_fields['plugin_hero_image'];
+
+          if (!empty($hero_image)): ?>
+            <img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr(get_the_title()); ?> - Hero Image"
+              class="screenshot-frame w-full h-80 object-cover">
+          <?php elseif (has_post_thumbnail()): ?>
             <?php the_post_thumbnail('large', [
-              'class' => 'screenshot-frame w-full h-auto'
+              'class' => 'screenshot-frame w-full h-80 object-cover'
             ]); ?>
           <?php else: ?>
             <div
@@ -361,102 +368,207 @@ $cta_footer_text     = $meta_fields['cta_footer_text'] ?: '30-day money-back gua
 <?php endif; ?>
 
 <!-- Pricing Section -->
-<section id="pricing" class="py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">
-        <?php echo esc_html($pricing_heading); ?>
-      </h2>
-      <p class="text-xl text-gray-600"><?php echo esc_html($pricing_desc); ?></p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-      <!-- Free Version -->
-      <div class="pricing-card bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-        <h3 class="text-2xl font-bold text-gray-800 mb-2">
-          <?php echo esc_html($free_plan_title); ?>
-        </h3>
-        <div class="text-4xl font-bold text-gray-800 mb-4">
-          <?php echo esc_html($free_plan_price); ?><span class="text-lg font-normal text-gray-600">
-            <?php echo esc_html($free_plan_period); ?>
-          </span>
-        </div>
-        <p class="text-gray-600 mb-6"><?php echo esc_html($free_plan_desc); ?></p>
-
-        <?php if (!empty($free_features)): ?>
-          <ul class="space-y-3 mb-8">
-            <?php foreach ($free_features as $i => $feature):
-              if (empty($feature))
-                continue;
-              ?>
-              <li class="flex items-center gap-2">
-                <?php if ($i < 4): ?>
-                  <i class="fas fa-check text-green-500"></i>
-                  <span><?php echo esc_html($feature); ?></span>
-                <?php else: ?>
-                  <i class="fas fa-times text-gray-400"></i>
-                  <span class="text-gray-400"><?php echo esc_html($feature); ?></span>
-                <?php endif; ?>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        <?php endif; ?>
-
-        <?php if ($free_version_url): ?>
-          <a href="<?php echo esc_url($free_version_url); ?>" target="_blank" rel="noopener noreferrer"
-            class="w-full block text-center border border-primary text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary-light transition">
-            <?php echo esc_html($free_button_text); ?>
-          </a>
-        <?php endif; ?>
+<!-- Pricing Section -->
+<?php if ($has_pro): ?>
+  <section id="pricing" class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">
+          <?php echo esc_html($meta_fields['pricing_heading'] ?: 'Choose Your Plan'); ?>
+        </h2>
+        <p class="text-xl text-gray-600">
+          <?php echo esc_html($meta_fields['pricing_desc'] ?: 'Start with our free version or unlock all features with PRO'); ?>
+        </p>
       </div>
 
-      <!-- PRO Version -->
-      <?php if ($has_pro && !empty($pro_features)): ?>
-        <div
-          class="pricing-card bg-gradient-to-br from-primary to-primary-light rounded-xl shadow-xl p-8 text-white relative">
-          <?php if ($show_recommended_badge): ?>
-            <div class="absolute -top-4 right-8 accent-bg text-white px-3 py-1 rounded-full text-sm font-medium">
-              <?php echo esc_html($recommended_badge_text); ?>
-            </div>
-          <?php endif; ?>
-          <h3 class="text-2xl font-bold mb-2"><?php echo esc_html($pro_plan_title); ?></h3>
-          <div class="text-4xl font-bold mb-4">
-            <?php echo esc_html($pro_plan_price); ?><span class="text-lg font-normal opacity-90">
-              <?php echo esc_html($pro_plan_period); ?>
-            </span>
-          </div>
-          <p class="opacity-90 mb-6"><?php echo esc_html($pro_plan_desc); ?></p>
-
-          <ul class="space-y-3 mb-8">
-            <?php foreach ($pro_features as $feature):
-              if (empty($feature))
-                continue;
-              ?>
-              <li class="flex items-center gap-2">
-                <i class="fas fa-check text-green-400"></i>
-                <span><?php echo esc_html($feature); ?></span>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-
-          <?php if ($pro_version_url): ?>
-            <a href="<?php echo esc_url($pro_version_url); ?>" target="_blank" rel="noopener noreferrer"
-              class="w-full block text-center bg-white text-primary px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition font-semibold">
-              <?php echo esc_html($pro_button_text_pricing); ?>
-            </a>
-          <?php endif; ?>
+      <!-- Pricing Toggle -->
+      <div class="flex justify-center mb-12">
+        <div class="bg-gray-100 rounded-full p-1 inline-flex">
+          <button type="button"
+            class="pricing-toggle-btn px-8 py-3 rounded-full font-medium text-lg transition-all duration-300 bg-primary text-white">
+            <?php echo esc_html($meta_fields['annual_label'] ?: 'Annual'); ?>
+          </button>
+          <button type="button"
+            class="pricing-toggle-btn px-8 py-3 rounded-full font-medium text-lg transition-all duration-300 text-gray-700 hover:text-primary">
+            <?php echo esc_html($meta_fields['lifetime_label'] ?: 'Lifetime'); ?>
+          </button>
         </div>
-      <?php endif; ?>
-    </div>
+      </div>
 
-    <div class="text-center mt-8">
-      <p class="text-gray-600">
-        <i class="fas fa-shield-alt text-primary mr-2"></i>
-        <?php echo esc_html($pricing_footer_text); ?>
-      </p>
+      <!-- Annual Pricing Cards -->
+      <div id="annual-pricing" class="pricing-plans active">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Single Site -->
+          <div
+            class="pricing-card bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center hover:shadow-xl transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              <?php echo esc_html($meta_fields['annual_single_site_title'] ?: 'Single Site'); ?>
+            </h3>
+            <div class="mb-4">
+              <span
+                class="text-4xl font-bold text-primary"><?php echo esc_html($meta_fields['annual_single_site_price'] ?: '$119'); ?></span>
+              <span
+                class="text-lg font-medium text-gray-600">/<?php echo esc_html($meta_fields['year_label'] ?: 'Year'); ?></span>
+            </div>
+            <p class="text-gray-600 mb-8">
+              <?php echo esc_html($meta_fields['annual_single_site_desc'] ?: 'Single site license. One year premium support and updates.'); ?>
+            </p>
+            <?php if ($pro_version_url): ?>
+              <a href="<?php echo esc_url($pro_version_url); ?>?plan=annual-single" target="_blank"
+                rel="noopener noreferrer"
+                class="w-full block text-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition">
+                <?php echo esc_html($meta_fields['buy_now_text'] ?: 'Buy Now'); ?>
+              </a>
+            <?php endif; ?>
+          </div>
+
+          <!-- Five Sites -->
+          <div
+            class="pricing-card bg-white rounded-xl shadow-xl border-2 border-primary p-8 text-center hover:shadow-2xl transition-shadow duration-300 relative">
+            <?php if ($meta_fields['show_recommended_annual'] == '1'): ?>
+              <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">
+                  <?php echo esc_html($meta_fields['recommended_badge_text'] ?: 'RECOMMENDED'); ?>
+                </span>
+              </div>
+            <?php endif; ?>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              <?php echo esc_html($meta_fields['annual_five_site_title'] ?: 'Five Site'); ?>
+            </h3>
+            <div class="mb-4">
+              <span
+                class="text-4xl font-bold text-primary"><?php echo esc_html($meta_fields['annual_five_site_price'] ?: '$199'); ?></span>
+              <span
+                class="text-lg font-medium text-gray-600">/<?php echo esc_html($meta_fields['year_label'] ?: 'Year'); ?></span>
+            </div>
+            <p class="text-gray-600 mb-8">
+              <?php echo esc_html($meta_fields['annual_five_site_desc'] ?: 'Five site license. One year premium support and updates.'); ?>
+            </p>
+            <?php if ($pro_version_url): ?>
+              <a href="<?php echo esc_url($pro_version_url); ?>?plan=annual-five" target="_blank" rel="noopener noreferrer"
+                class="w-full block text-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition font-semibold">
+                <?php echo esc_html($meta_fields['buy_now_text'] ?: 'Buy Now'); ?>
+              </a>
+            <?php endif; ?>
+          </div>
+
+          <!-- Ten Sites -->
+          <div
+            class="pricing-card bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center hover:shadow-xl transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              <?php echo esc_html($meta_fields['annual_ten_site_title'] ?: 'Ten Sites'); ?>
+            </h3>
+            <div class="mb-4">
+              <span
+                class="text-4xl font-bold text-primary"><?php echo esc_html($meta_fields['annual_ten_site_price'] ?: '$229'); ?></span>
+              <span
+                class="text-lg font-medium text-gray-600">/<?php echo esc_html($meta_fields['year_label'] ?: 'Year'); ?></span>
+            </div>
+            <p class="text-gray-600 mb-8">
+              <?php echo esc_html($meta_fields['annual_ten_site_desc'] ?: 'Ten site license. One year premium support and updates.'); ?>
+            </p>
+            <?php if ($pro_version_url): ?>
+              <a href="<?php echo esc_url($pro_version_url); ?>?plan=annual-ten" target="_blank" rel="noopener noreferrer"
+                class="w-full block text-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition">
+                <?php echo esc_html($meta_fields['buy_now_text'] ?: 'Buy Now'); ?>
+              </a>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lifetime Pricing Cards (Hidden by default) -->
+      <div id="lifetime-pricing" class="pricing-plans hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Single Site Lifetime -->
+          <div
+            class="pricing-card bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center hover:shadow-xl transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              <?php echo esc_html($meta_fields['lifetime_single_site_title'] ?: 'Single Site'); ?>
+            </h3>
+            <div class="mb-4">
+              <span
+                class="text-4xl font-bold text-primary"><?php echo esc_html($meta_fields['lifetime_single_site_price'] ?: '$299'); ?></span>
+              <span
+                class="text-lg font-medium text-gray-600">/<?php echo esc_html($meta_fields['lifetime_label_period'] ?: 'Lifetime'); ?></span>
+            </div>
+            <p class="text-gray-600 mb-8">
+              <?php echo esc_html($meta_fields['lifetime_single_site_desc'] ?: 'Single site license. Lifetime premium support and updates.'); ?>
+            </p>
+            <?php if ($pro_version_url): ?>
+              <a href="<?php echo esc_url($pro_version_url); ?>?plan=lifetime-single" target="_blank"
+                rel="noopener noreferrer"
+                class="w-full block text-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition">
+                <?php echo esc_html($meta_fields['buy_now_text'] ?: 'Buy Now'); ?>
+              </a>
+            <?php endif; ?>
+          </div>
+
+          <!-- Five Sites Lifetime -->
+          <div
+            class="pricing-card bg-white rounded-xl shadow-xl border-2 border-primary p-8 text-center hover:shadow-2xl transition-shadow duration-300 relative">
+            <?php if ($meta_fields['show_recommended_lifetime'] == '1'): ?>
+              <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">
+                  <?php echo esc_html($meta_fields['recommended_badge_text'] ?: 'RECOMMENDED'); ?>
+                </span>
+              </div>
+            <?php endif; ?>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              <?php echo esc_html($meta_fields['lifetime_five_site_title'] ?: 'Five Site'); ?>
+            </h3>
+            <div class="mb-4">
+              <span
+                class="text-4xl font-bold text-primary"><?php echo esc_html($meta_fields['lifetime_five_site_price'] ?: '$499'); ?></span>
+              <span
+                class="text-lg font-medium text-gray-600">/<?php echo esc_html($meta_fields['lifetime_label_period'] ?: 'Lifetime'); ?></span>
+            </div>
+            <p class="text-gray-600 mb-8">
+              <?php echo esc_html($meta_fields['lifetime_five_site_desc'] ?: 'Five site license. Lifetime premium support and updates.'); ?>
+            </p>
+            <?php if ($pro_version_url): ?>
+              <a href="<?php echo esc_url($pro_version_url); ?>?plan=lifetime-five" target="_blank"
+                rel="noopener noreferrer"
+                class="w-full block text-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition font-semibold">
+                <?php echo esc_html($meta_fields['buy_now_text'] ?: 'Buy Now'); ?>
+              </a>
+            <?php endif; ?>
+          </div>
+
+          <!-- Ten Sites Lifetime -->
+          <div
+            class="pricing-card bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center hover:shadow-xl transition-shadow duration-300">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              <?php echo esc_html($meta_fields['lifetime_ten_site_title'] ?: 'Ten Sites'); ?>
+            </h3>
+            <div class="mb-4">
+              <span
+                class="text-4xl font-bold text-primary"><?php echo esc_html($meta_fields['lifetime_ten_site_price'] ?: '$699'); ?></span>
+              <span
+                class="text-lg font-medium text-gray-600">/<?php echo esc_html($meta_fields['lifetime_label_period'] ?: 'Lifetime'); ?></span>
+            </div>
+            <p class="text-gray-600 mb-8">
+              <?php echo esc_html($meta_fields['lifetime_ten_site_desc'] ?: 'Ten site license. Lifetime premium support and updates.'); ?>
+            </p>
+            <?php if ($pro_version_url): ?>
+              <a href="<?php echo esc_url($pro_version_url); ?>?plan=lifetime-ten" target="_blank" rel="noopener noreferrer"
+                class="w-full block text-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition">
+                <?php echo esc_html($meta_fields['buy_now_text'] ?: 'Buy Now'); ?>
+              </a>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <p class="text-gray-600">
+          <i class="fas fa-shield-alt text-primary mr-2" aria-hidden="true"></i>
+          <?php echo esc_html($meta_fields['pricing_footer_text'] ?: '30-day money-back guarantee • Instant download • 1 year of updates & support'); ?>
+        </p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+<?php endif; ?>
 
 <!-- Testimonials -->
 <?php if (!empty($testimonials)): ?>
@@ -673,6 +785,40 @@ $cta_footer_text     = $meta_fields['cta_footer_text'] ?: '30-day money-back gua
       }
     });
   });
+
+  // Pricing Toggle Functionality
+  const pricingToggleBtns = document.querySelectorAll('.pricing-toggle-btn');
+  const pricingPlans = document.querySelectorAll('.pricing-plans');
+
+  if (pricingToggleBtns.length && pricingPlans.length) {
+    pricingToggleBtns.forEach((btn, index) => {
+      btn.addEventListener('click', function () {
+        // Remove active class from all buttons
+        pricingToggleBtns.forEach(b => {
+          b.classList.remove('bg-primary', 'text-white');
+          b.classList.add('text-gray-700', 'hover:text-primary');
+        });
+
+        // Add active class to clicked button
+        this.classList.add('bg-primary', 'text-white');
+        this.classList.remove('text-gray-700', 'hover:text-primary');
+
+        // Hide all pricing plans
+        pricingPlans.forEach(plan => {
+          plan.classList.add('hidden');
+          plan.classList.remove('active');
+        });
+
+        // Show selected pricing plan
+        const planId = index === 0 ? 'annual-pricing' : 'lifetime-pricing';
+        const selectedPlan = document.getElementById(planId);
+        if (selectedPlan) {
+          selectedPlan.classList.remove('hidden');
+          selectedPlan.classList.add('active');
+        }
+      });
+    });
+  }
 </script>
 
 <?php get_footer(); ?>

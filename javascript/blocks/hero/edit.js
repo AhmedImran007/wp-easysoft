@@ -14,18 +14,11 @@ export default function Edit({ attributes, setAttributes }) {
 		primaryButtonURL,
 		secondaryButtonText,
 		secondaryButtonURL,
-		plugins,
 	} = attributes;
 
 	const blockProps = useBlockProps({
 		className: 'gradient-bg text-white py-20',
 	});
-
-	const updatePlugin = (index, field, value) => {
-		const newPlugins = [...plugins];
-		newPlugins[index][field] = value;
-		setAttributes({ plugins: newPlugins });
-	};
 
 	return (
 		<>
@@ -60,25 +53,6 @@ export default function Edit({ attributes, setAttributes }) {
 							setAttributes({ secondaryButtonURL: v })
 						}
 					/>
-				</PanelBody>
-
-				<PanelBody title="Plugins" initialOpen={false}>
-					{plugins.map((plugin, i) => (
-						<div key={i} style={{ marginBottom: '18px' }}>
-							<TextControl
-								label={`Plugin ${i + 1} Icon Class`}
-								value={plugin.icon}
-								onChange={(v) => updatePlugin(i, 'icon', v)}
-								help="Font Awesome icon class (e.g., fas fa-map-marked-alt)"
-							/>
-
-							<TextControl
-								label={`Plugin ${i + 1} Name`}
-								value={plugin.name}
-								onChange={(v) => updatePlugin(i, 'name', v)}
-							/>
-						</div>
-					))}
 				</PanelBody>
 			</InspectorControls>
 
@@ -138,38 +112,6 @@ export default function Edit({ attributes, setAttributes }) {
 									allowedFormats={[]}
 								/>
 							</a>
-						</div>
-
-						{/* Plugins Showcase */}
-						<div className="mt-12 flex items-center justify-center space-x-6">
-							<div className="text-center">
-								<div className="flex h-40 w-64 items-center justify-center rounded-lg bg-white/20 p-4 backdrop-blur-sm">
-									<span className="text-white/70">
-										Plugin Preview Image
-									</span>
-								</div>
-							</div>
-							<div className="flex flex-col space-y-4">
-								{plugins.map((plugin, index) => (
-									<div
-										key={index}
-										className="flex items-center space-x-3 rounded-lg bg-white/20 p-3 backdrop-blur-sm"
-									>
-										<i
-											className={`${plugin.icon} text-2xl`}
-										></i>
-										<RichText
-											tagName="span"
-											value={plugin.name}
-											onChange={(v) =>
-												updatePlugin(index, 'name', v)
-											}
-											placeholder="Plugin name"
-											allowedFormats={[]}
-										/>
-									</div>
-								))}
-							</div>
 						</div>
 					</div>
 				</div>

@@ -9,7 +9,7 @@ get_header();
 ?>
 
 <section id="primary" class="bg-gray-50">
-	<main id="main" class="container">
+	<main id="main" class="">
 
 		<?php
 		/* Start the Loop */
@@ -17,7 +17,7 @@ get_header();
 			the_post();
 
 			// Page content wrapper with Tailwind prose + spacing
-			echo '<div class="prose prose-lg max-w-full mx-auto mb-12">';
+			echo '<div class="prose prose-lg max-w-full mx-auto">';
 			get_template_part('template-parts/content/content', 'page');
 			echo '</div>';
 

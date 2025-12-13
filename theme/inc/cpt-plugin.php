@@ -74,9 +74,6 @@ function wp_easysoft_register_wp_plugin_post_type()
 }
 add_action('init', 'wp_easysoft_register_wp_plugin_post_type', 0);
 
-// Remove the custom permalink filter since we're using the default CPT slug
-// No need for wp_easysoft_wp_plugin_permalink function anymore
-
 // Add comprehensive meta boxes for WP Plugin
 function wp_easysoft_add_wp_plugin_meta_boxes()
 {
@@ -108,6 +105,7 @@ function wp_easysoft_get_wp_plugin_meta_fields($post_id)
     'pro_version_url'        => '',
     'woocommerce_compatible' => '0',
     'has_pro'                => '0',
+    'plugin_hero_image'      => '',
   );
 
   // Dynamic section headings
@@ -147,8 +145,48 @@ function wp_easysoft_get_wp_plugin_meta_fields($post_id)
     'cta_footer_text'         => '30-day money-back guarantee • Instant download • 1 year of updates & support',
   );
 
-  // Pricing fields
-  $pricing_fields = array(
+  // Annual Pricing fields
+  $annual_pricing_fields = array(
+    'annual_single_site_title' => 'Single Site',
+    'annual_single_site_price' => '$119',
+    'annual_single_site_desc'  => 'Single site license. One year premium support and updates.',
+    'annual_five_site_title'   => 'Five Site',
+    'annual_five_site_price'   => '$199',
+    'annual_five_site_desc'    => 'Five site license. One year premium support and updates.',
+    'annual_ten_site_title'    => 'Ten Sites',
+    'annual_ten_site_price'    => '$229',
+    'annual_ten_site_desc'     => 'Ten site license. One year premium support and updates.',
+    'show_recommended_annual'  => '1', // Show recommended badge on annual five site by default
+    'annual_recommended_plan'  => 'five_site', // Which plan is recommended: single_site, five_site, ten_sites
+  );
+
+  // Lifetime Pricing fields
+  $lifetime_pricing_fields = array(
+    'lifetime_single_site_title' => 'Single Site',
+    'lifetime_single_site_price' => '$299',
+    'lifetime_single_site_desc'  => 'Single site license. Lifetime premium support and updates.',
+    'lifetime_five_site_title'   => 'Five Site',
+    'lifetime_five_site_price'   => '$499',
+    'lifetime_five_site_desc'    => 'Five site license. Lifetime premium support and updates.',
+    'lifetime_ten_site_title'    => 'Ten Sites',
+    'lifetime_ten_site_price'    => '$699',
+    'lifetime_ten_site_desc'     => 'Ten site license. Lifetime premium support and updates.',
+    'show_recommended_lifetime'  => '1', // Show recommended badge on lifetime five site by default
+    'lifetime_recommended_plan'  => 'five_site', // Which plan is recommended: single_site, five_site, ten_sites
+  );
+
+  // General pricing settings
+  $general_pricing_fields = array(
+    'recommended_badge_text' => 'RECOMMENDED',
+    'buy_now_text'           => 'Buy Now',
+    'annual_label'           => 'Annual',
+    'lifetime_label'         => 'Lifetime',
+    'year_label'             => 'Year',
+    'lifetime_label_period'  => 'Lifetime',
+  );
+
+  // Old pricing fields for backward compatibility
+  $legacy_pricing_fields = array(
     'free_plan_title'        => 'Free Version',
     'free_plan_price'        => '$0',
     'free_plan_period'       => '/forever',
@@ -157,12 +195,11 @@ function wp_easysoft_get_wp_plugin_meta_fields($post_id)
     'pro_plan_price'         => '$59',
     'pro_plan_period'        => '/year',
     'pro_plan_desc'          => 'Unlock all features and premium support',
-    'recommended_badge_text' => 'RECOMMENDED',
     'show_recommended_badge' => '1',
   );
 
   // Merge all fields
-  $all_fields = array_merge($basic_fields, $dynamic_text_fields, $button_text_fields, $pricing_fields);
+  $all_fields = array_merge($basic_fields, $dynamic_text_fields, $button_text_fields, $annual_pricing_fields, $lifetime_pricing_fields, $general_pricing_fields, $legacy_pricing_fields);
 
   // Get values from database
   foreach ($all_fields as $field => $default) {
@@ -301,6 +338,32 @@ function wp_easysoft_wp_plugin_meta_box_callback($post)
     .half-width:last-child {
       margin-right: 0;
     }
+
+    .third-width {
+      width: 31%;
+      display: inline-block;
+      margin-right: 2%;
+    }
+
+    .third-width:last-child {
+      margin-right: 0;
+    }
+
+    .pricing-plan-section {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .pricing-plan-section h4 {
+      margin-top: 0;
+      color: #1F3266;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
   </style>
 
   <!-- Basic Information Section -->
@@ -370,6 +433,31 @@ function wp_easysoft_wp_plugin_meta_box_callback($post)
       <input type="url" id="pro_version_url" name="pro_version_url"
         value="<?php echo esc_attr($meta_fields['pro_version_url']); ?>" class="regular-text"
         placeholder="https://your-site.com/pro-version">
+    </div>
+
+    <div class="meta-field-row">
+      <label for="plugin_hero_image">Plugin Hero Image</label>
+      <div class="hero-image-upload">
+        <input type="hidden" id="plugin_hero_image" name="plugin_hero_image"
+          value="<?php echo esc_attr($meta_fields['plugin_hero_image']); ?>" class="regular-text" />
+        <div class="hero-image-preview" style="margin-top: 10px;">
+          <?php if (!empty($meta_fields['plugin_hero_image'])): ?>
+            <img src="<?php echo esc_url($meta_fields['plugin_hero_image']); ?>"
+              style="max-width: 300px; height: auto; display: block; margin-bottom: 10px;" />
+          <?php endif; ?>
+        </div>
+        <button type="button" class="button hero-image-upload-btn" style="margin-right: 10px;">
+          <?php _e('Upload Hero Image', 'wp-easysoft'); ?>
+        </button>
+        <?php if (!empty($meta_fields['plugin_hero_image'])): ?>
+          <button type="button" class="button button-link-delete hero-image-remove-btn">
+            <?php _e('Remove Image', 'wp-easysoft'); ?>
+          </button>
+        <?php endif; ?>
+        <p class="description">
+          <?php _e('Recommended size: 800x600px or larger. This image will be displayed in the hero section.', 'wp-easysoft'); ?>
+        </p>
+      </div>
     </div>
 
     <div class="meta-field-row">
@@ -599,67 +687,9 @@ function wp_easysoft_wp_plugin_meta_box_callback($post)
     </div>
   </div>
 
-  <!-- Pricing Details -->
+  <!-- NEW: 3-Column Pricing Section -->
   <div class="meta-box-section">
-    <h3>Pricing Details</h3>
-
-    <div class="meta-field-row">
-      <h4>Free Plan</h4>
-      <div class="half-width">
-        <label for="free_plan_title">Free Plan Title</label>
-        <input type="text" id="free_plan_title" name="free_plan_title"
-          value="<?php echo esc_attr($meta_fields['free_plan_title']); ?>" class="regular-text"
-          placeholder="Free Version">
-      </div>
-      <div class="half-width">
-        <label for="free_plan_price">Free Plan Price</label>
-        <input type="text" id="free_plan_price" name="free_plan_price"
-          value="<?php echo esc_attr($meta_fields['free_plan_price']); ?>" class="regular-text" placeholder="$0">
-      </div>
-    </div>
-
-    <div class="meta-field-row">
-      <div class="half-width">
-        <label for="free_plan_period">Free Plan Period</label>
-        <input type="text" id="free_plan_period" name="free_plan_period"
-          value="<?php echo esc_attr($meta_fields['free_plan_period']); ?>" class="regular-text" placeholder="/forever">
-      </div>
-      <div class="half-width">
-        <label for="free_plan_desc">Free Plan Description</label>
-        <input type="text" id="free_plan_desc" name="free_plan_desc"
-          value="<?php echo esc_attr($meta_fields['free_plan_desc']); ?>" class="regular-text"
-          placeholder="Perfect for basic needs">
-      </div>
-    </div>
-
-    <div class="meta-field-row">
-      <h4>PRO Plan</h4>
-      <div class="half-width">
-        <label for="pro_plan_title">PRO Plan Title</label>
-        <input type="text" id="pro_plan_title" name="pro_plan_title"
-          value="<?php echo esc_attr($meta_fields['pro_plan_title']); ?>" class="regular-text"
-          placeholder="<?php echo get_the_title($post->ID); ?> PRO">
-      </div>
-      <div class="half-width">
-        <label for="pro_plan_price">PRO Plan Price</label>
-        <input type="text" id="pro_plan_price" name="pro_plan_price"
-          value="<?php echo esc_attr($meta_fields['pro_plan_price']); ?>" class="regular-text" placeholder="$59">
-      </div>
-    </div>
-
-    <div class="meta-field-row">
-      <div class="half-width">
-        <label for="pro_plan_period">PRO Plan Period</label>
-        <input type="text" id="pro_plan_period" name="pro_plan_period"
-          value="<?php echo esc_attr($meta_fields['pro_plan_period']); ?>" class="regular-text" placeholder="/year">
-      </div>
-      <div class="half-width">
-        <label for="pro_plan_desc">PRO Plan Description</label>
-        <input type="text" id="pro_plan_desc" name="pro_plan_desc"
-          value="<?php echo esc_attr($meta_fields['pro_plan_desc']); ?>" class="regular-text"
-          placeholder="Unlock all features and premium support">
-      </div>
-    </div>
+    <h3>3-Column Pricing Settings</h3>
 
     <div class="meta-field-row">
       <div class="half-width">
@@ -669,10 +699,182 @@ function wp_easysoft_wp_plugin_meta_box_callback($post)
           placeholder="RECOMMENDED">
       </div>
       <div class="half-width">
+        <label for="buy_now_text">Buy Now Button Text</label>
+        <input type="text" id="buy_now_text" name="buy_now_text"
+          value="<?php echo esc_attr($meta_fields['buy_now_text']); ?>" class="regular-text" placeholder="Buy Now">
+      </div>
+    </div>
+
+    <div class="meta-field-row">
+      <div class="half-width">
+        <label for="annual_label">Annual Label</label>
+        <input type="text" id="annual_label" name="annual_label"
+          value="<?php echo esc_attr($meta_fields['annual_label']); ?>" class="regular-text" placeholder="Annual">
+      </div>
+      <div class="half-width">
+        <label for="lifetime_label">Lifetime Label</label>
+        <input type="text" id="lifetime_label" name="lifetime_label"
+          value="<?php echo esc_attr($meta_fields['lifetime_label']); ?>" class="regular-text" placeholder="Lifetime">
+      </div>
+    </div>
+
+    <div class="meta-field-row">
+      <div class="half-width">
+        <label for="year_label">Year Label</label>
+        <input type="text" id="year_label" name="year_label" value="<?php echo esc_attr($meta_fields['year_label']); ?>"
+          class="regular-text" placeholder="Year">
+      </div>
+      <div class="half-width">
+        <label for="lifetime_label_period">Lifetime Period Label</label>
+        <input type="text" id="lifetime_label_period" name="lifetime_label_period"
+          value="<?php echo esc_attr($meta_fields['lifetime_label_period']); ?>" class="regular-text"
+          placeholder="Lifetime">
+      </div>
+    </div>
+  </div>
+
+  <!-- Annual Pricing Plans -->
+  <div class="meta-box-section">
+    <h3>Annual Pricing Plans</h3>
+
+    <div class="pricing-plan-section">
+      <h4>Single Site Plan</h4>
+      <div class="meta-field-row">
+        <label for="annual_single_site_title">Plan Title</label>
+        <input type="text" id="annual_single_site_title" name="annual_single_site_title"
+          value="<?php echo esc_attr($meta_fields['annual_single_site_title']); ?>" class="regular-text"
+          placeholder="Single Site">
+      </div>
+      <div class="meta-field-row">
+        <label for="annual_single_site_price">Price</label>
+        <input type="text" id="annual_single_site_price" name="annual_single_site_price"
+          value="<?php echo esc_attr($meta_fields['annual_single_site_price']); ?>" class="regular-text"
+          placeholder="$119">
+      </div>
+      <div class="meta-field-row">
+        <label for="annual_single_site_desc">Description</label>
+        <textarea id="annual_single_site_desc" name="annual_single_site_desc" rows="2" class="large-text"
+          placeholder="Single site license. One year premium support and updates."><?php echo esc_textarea($meta_fields['annual_single_site_desc']); ?></textarea>
+      </div>
+    </div>
+
+    <div class="pricing-plan-section">
+      <h4>Five Site Plan</h4>
+      <div class="meta-field-row">
+        <label for="annual_five_site_title">Plan Title</label>
+        <input type="text" id="annual_five_site_title" name="annual_five_site_title"
+          value="<?php echo esc_attr($meta_fields['annual_five_site_title']); ?>" class="regular-text"
+          placeholder="Five Site">
+      </div>
+      <div class="meta-field-row">
+        <label for="annual_five_site_price">Price</label>
+        <input type="text" id="annual_five_site_price" name="annual_five_site_price"
+          value="<?php echo esc_attr($meta_fields['annual_five_site_price']); ?>" class="regular-text" placeholder="$199">
+      </div>
+      <div class="meta-field-row">
+        <label for="annual_five_site_desc">Description</label>
+        <textarea id="annual_five_site_desc" name="annual_five_site_desc" rows="2" class="large-text"
+          placeholder="Five site license. One year premium support and updates."><?php echo esc_textarea($meta_fields['annual_five_site_desc']); ?></textarea>
+      </div>
+      <div class="meta-field-row">
         <label class="checkbox-label">
-          <input type="checkbox" name="show_recommended_badge" value="1" <?php checked($meta_fields['show_recommended_badge'], '1'); ?>>
-          Show Recommended Badge
+          <input type="checkbox" name="show_recommended_annual" value="1" <?php checked($meta_fields['show_recommended_annual'], '1'); ?>>
+          Show "Recommended" badge on this plan
         </label>
+      </div>
+    </div>
+
+    <div class="pricing-plan-section">
+      <h4>Ten Sites Plan</h4>
+      <div class="meta-field-row">
+        <label for="annual_ten_site_title">Plan Title</label>
+        <input type="text" id="annual_ten_site_title" name="annual_ten_site_title"
+          value="<?php echo esc_attr($meta_fields['annual_ten_site_title']); ?>" class="regular-text"
+          placeholder="Ten Sites">
+      </div>
+      <div class="meta-field-row">
+        <label for="annual_ten_site_price">Price</label>
+        <input type="text" id="annual_ten_site_price" name="annual_ten_site_price"
+          value="<?php echo esc_attr($meta_fields['annual_ten_site_price']); ?>" class="regular-text" placeholder="$229">
+      </div>
+      <div class="meta-field-row">
+        <label for="annual_ten_site_desc">Description</label>
+        <textarea id="annual_ten_site_desc" name="annual_ten_site_desc" rows="2" class="large-text"
+          placeholder="Ten site license. One year premium support and updates."><?php echo esc_textarea($meta_fields['annual_ten_site_desc']); ?></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lifetime Pricing Plans -->
+  <div class="meta-box-section">
+    <h3>Lifetime Pricing Plans</h3>
+
+    <div class="pricing-plan-section">
+      <h4>Single Site Plan (Lifetime)</h4>
+      <div class="meta-field-row">
+        <label for="lifetime_single_site_title">Plan Title</label>
+        <input type="text" id="lifetime_single_site_title" name="lifetime_single_site_title"
+          value="<?php echo esc_attr($meta_fields['lifetime_single_site_title']); ?>" class="regular-text"
+          placeholder="Single Site">
+      </div>
+      <div class="meta-field-row">
+        <label for="lifetime_single_site_price">Price</label>
+        <input type="text" id="lifetime_single_site_price" name="lifetime_single_site_price"
+          value="<?php echo esc_attr($meta_fields['lifetime_single_site_price']); ?>" class="regular-text"
+          placeholder="$299">
+      </div>
+      <div class="meta-field-row">
+        <label for="lifetime_single_site_desc">Description</label>
+        <textarea id="lifetime_single_site_desc" name="lifetime_single_site_desc" rows="2" class="large-text"
+          placeholder="Single site license. Lifetime premium support and updates."><?php echo esc_textarea($meta_fields['lifetime_single_site_desc']); ?></textarea>
+      </div>
+    </div>
+
+    <div class="pricing-plan-section">
+      <h4>Five Site Plan (Lifetime)</h4>
+      <div class="meta-field-row">
+        <label for="lifetime_five_site_title">Plan Title</label>
+        <input type="text" id="lifetime_five_site_title" name="lifetime_five_site_title"
+          value="<?php echo esc_attr($meta_fields['lifetime_five_site_title']); ?>" class="regular-text"
+          placeholder="Five Site">
+      </div>
+      <div class="meta-field-row">
+        <label for="lifetime_five_site_price">Price</label>
+        <input type="text" id="lifetime_five_site_price" name="lifetime_five_site_price"
+          value="<?php echo esc_attr($meta_fields['lifetime_five_site_price']); ?>" class="regular-text"
+          placeholder="$499">
+      </div>
+      <div class="meta-field-row">
+        <label for="lifetime_five_site_desc">Description</label>
+        <textarea id="lifetime_five_site_desc" name="lifetime_five_site_desc" rows="2" class="large-text"
+          placeholder="Five site license. Lifetime premium support and updates."><?php echo esc_textarea($meta_fields['lifetime_five_site_desc']); ?></textarea>
+      </div>
+      <div class="meta-field-row">
+        <label class="checkbox-label">
+          <input type="checkbox" name="show_recommended_lifetime" value="1" <?php checked($meta_fields['show_recommended_lifetime'], '1'); ?>>
+          Show "Recommended" badge on this plan
+        </label>
+      </div>
+    </div>
+
+    <div class="pricing-plan-section">
+      <h4>Ten Sites Plan (Lifetime)</h4>
+      <div class="meta-field-row">
+        <label for="lifetime_ten_site_title">Plan Title</label>
+        <input type="text" id="lifetime_ten_site_title" name="lifetime_ten_site_title"
+          value="<?php echo esc_attr($meta_fields['lifetime_ten_site_title']); ?>" class="regular-text"
+          placeholder="Ten Sites">
+      </div>
+      <div class="meta-field-row">
+        <label for="lifetime_ten_site_price">Price</label>
+        <input type="text" id="lifetime_ten_site_price" name="lifetime_ten_site_price"
+          value="<?php echo esc_attr($meta_fields['lifetime_ten_site_price']); ?>" class="regular-text"
+          placeholder="$699">
+      </div>
+      <div class="meta-field-row">
+        <label for="lifetime_ten_site_desc">Description</label>
+        <textarea id="lifetime_ten_site_desc" name="lifetime_ten_site_desc" rows="2" class="large-text"
+          placeholder="Ten site license. Lifetime premium support and updates."><?php echo esc_textarea($meta_fields['lifetime_ten_site_desc']); ?></textarea>
       </div>
     </div>
   </div>
@@ -884,6 +1086,71 @@ function wp_easysoft_wp_plugin_meta_box_callback($post)
         });
       }
     }
+
+    jQuery(document).ready(function ($) {
+      // Hero image upload
+      var heroImageFrame;
+
+      $('.hero-image-upload-btn').on('click', function (e) {
+        e.preventDefault();
+
+        var button = $(this);
+        var container = button.closest('.hero-image-upload');
+        var input = container.find('input[type="hidden"]');
+        var preview = container.find('.hero-image-preview');
+
+        // If the media frame already exists, reopen it.
+        if (heroImageFrame) {
+          heroImageFrame.open();
+          return;
+        }
+
+        // Create a new media frame
+        heroImageFrame = wp.media({
+          title: '<?php _e("Select Hero Image", "wp-easysoft"); ?>',
+          button: {
+            text: '<?php _e("Use this image", "wp-easysoft"); ?>'
+          },
+          multiple: false
+        });
+
+        // When an image is selected in the media frame...
+        heroImageFrame.on('select', function () {
+          // Get media attachment details from the frame state
+          var attachment = heroImageFrame.state().get('selection').first().toJSON();
+
+          // Set the input value to the attachment URL
+          input.val(attachment.url);
+
+          // Display the image preview
+          preview.html('<img src="' + attachment.url + '" style="max-width: 300px; height: auto; display: block; margin-bottom: 10px;" />');
+
+          // Show the remove button
+          container.find('.hero-image-remove-btn').show();
+        });
+
+        // Finally, open the modal on click
+        heroImageFrame.open();
+      });
+
+      // Remove hero image
+      $(document).on('click', '.hero-image-remove-btn', function (e) {
+        e.preventDefault();
+
+        var container = $(this).closest('.hero-image-upload');
+        var input = container.find('input[type="hidden"]');
+        var preview = container.find('.hero-image-preview');
+
+        // Clear the input value
+        input.val('');
+
+        // Remove the preview image
+        preview.html('');
+
+        // Hide the remove button
+        $(this).hide();
+      });
+    });
   </script>
 
   <?php
@@ -921,6 +1188,7 @@ function wp_easysoft_save_wp_plugin_meta($post_id)
     'active_installs',
     'free_version_url',
     'pro_version_url',
+    'plugin_hero_image',
 
     // Dynamic section headings
     'features_heading',
@@ -955,7 +1223,39 @@ function wp_easysoft_save_wp_plugin_meta($post_id)
     'pricing_footer_text',
     'cta_footer_text',
 
-    // Pricing details
+    // Annual Pricing fields
+    'annual_single_site_title',
+    'annual_single_site_price',
+    'annual_single_site_desc',
+    'annual_five_site_title',
+    'annual_five_site_price',
+    'annual_five_site_desc',
+    'annual_ten_site_title',
+    'annual_ten_site_price',
+    'annual_ten_site_desc',
+    'annual_recommended_plan',
+
+    // Lifetime Pricing fields
+    'lifetime_single_site_title',
+    'lifetime_single_site_price',
+    'lifetime_single_site_desc',
+    'lifetime_five_site_title',
+    'lifetime_five_site_price',
+    'lifetime_five_site_desc',
+    'lifetime_ten_site_title',
+    'lifetime_ten_site_price',
+    'lifetime_ten_site_desc',
+    'lifetime_recommended_plan',
+
+    // General pricing settings
+    'recommended_badge_text',
+    'buy_now_text',
+    'annual_label',
+    'lifetime_label',
+    'year_label',
+    'lifetime_label_period',
+
+    // Legacy pricing fields (for backward compatibility)
     'free_plan_title',
     'free_plan_price',
     'free_plan_period',
@@ -964,11 +1264,15 @@ function wp_easysoft_save_wp_plugin_meta($post_id)
     'pro_plan_price',
     'pro_plan_period',
     'pro_plan_desc',
-    'recommended_badge_text',
-    'show_recommended_badge',
   );
 
-  $checkbox_fields = array('has_pro', 'woocommerce_compatible');
+  $checkbox_fields = array(
+    'has_pro',
+    'woocommerce_compatible',
+    'show_recommended_annual',
+    'show_recommended_lifetime',
+    'show_recommended_badge' // Legacy field
+  );
 
   $array_fields = array('features', 'use_cases', 'demos', 'testimonials', 'faqs', 'free_features', 'pro_features');
 
